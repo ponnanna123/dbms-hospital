@@ -29,7 +29,7 @@ app.listen(process.env.PORT, () => {
 
 app.get("/", (req, res) => {
   try {
-    res.json("Hello, World!");
+    res.json("Homepage");
   } catch (error) {
     console.log(error);
   }
@@ -41,7 +41,6 @@ app.get("/patients", (req, res) => {
   db.query(query, (error, data) => {
     try {
       res.json(data);
-      //   console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -71,7 +70,7 @@ app.post("/add-patient", (req, res) => {
           error: "Internal Server Error",
         });
       }
-      res.status(201).json({
+      res.status(201).send({
         message: "Patient inserted successfully.",
       });
     }
