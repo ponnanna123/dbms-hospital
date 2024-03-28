@@ -40,11 +40,36 @@ const SignUp = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <form ref={formRef} className="p-10 bg-white rounded shadow-md w-96">
+    <div className="flex justify-center">
+    <form ref={formRef} className="p-10 bg-white rounded shadow-md w-96 mr-10 mt-5 ">
         <h2 className="mb-5 text-3xl font-semibold text-center text-gray-700">
           Add Patient
         </h2>
         <div className="mb-4">
+        <div className="mb-4 flex">
+      <div className="flex-1 mr-2">
+        <label className="block mb-2 text-sm font-bold text-gray-700">
+          First Name:
+        </label>
+        <input
+          className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+          type="text"
+          name="first_name"
+          onChange={handleChange}
+        />
+      </div>
+      <div className="flex-1 ml-2">
+        <label className="block mb-2 text-sm font-bold text-gray-700">
+          Last Name:
+        </label>
+        <input
+          className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+          type="text"
+          name="last_name"
+          onChange={handleChange}
+        />
+      </div>
+    </div>
           <div className="mb-4">
             <label className="block mb-2 text-sm font-bold text-gray-700">
               Email:
@@ -67,27 +92,18 @@ const SignUp = () => {
               onChange={handleChange}
             />
           </div>
+          <div className="mb-6">
           <label className="block mb-2 text-sm font-bold text-gray-700">
-            First Name:
+            Phone Number:
           </label>
           <input
             className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-            type="text"
-            name="first_name"
+            type="number"
+            name="phone_number"
             onChange={handleChange}
           />
         </div>
-        <div className="mb-4">
-          <label className="block mb-2 text-sm font-bold text-gray-700">
-            Last Name:
-          </label>
-          <input
-            className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-            type="text"
-            name="last_name"
-            onChange={handleChange}
-          />
-        </div>
+    
         <div className="mb-4">
           <label className="block mb-2 text-sm font-bold text-gray-700">
             Date of Birth:
@@ -147,7 +163,70 @@ const SignUp = () => {
             onChange={handleChange}
           />
         </div>
-        <div className="mb-6">
+        
+        <div className="mb-6 text-center">
+          <button
+            className="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
+            type="button"
+            onClick={addPatient}
+          >
+            Add Patient
+          </button>
+        </div>
+        </div>
+      </form>
+      <form ref={formRef} className="p-10 bg-white rounded shadow-md w-96 mr-10 mt-5 ">
+        <h2 className="mb-5 text-3xl font-semibold text-center text-gray-700">
+          Add Doctor
+        </h2>
+        <div className="mb-4">
+        <div className="mb-4 flex">
+      <div className="flex-1 mr-2">
+        <label className="block mb-2 text-sm font-bold text-gray-700">
+          First Name:
+        </label>
+        <input
+          className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+          type="text"
+          name="first_name"
+          onChange={handleChange}
+        />
+      </div>
+      <div className="flex-1 ml-2">
+        <label className="block mb-2 text-sm font-bold text-gray-700">
+          Last Name:
+        </label>
+        <input
+          className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+          type="text"
+          name="last_name"
+          onChange={handleChange}
+        />
+      </div>
+    </div>
+          <div className="mb-4">
+            <label className="block mb-2 text-sm font-bold text-gray-700">
+              Email:
+            </label>
+            <input
+              className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+              type="email"
+              name="email"
+              onChange={handleChange}
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block mb-2 text-sm font-bold text-gray-700">
+              Password:
+            </label>
+            <input
+              className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+              type="password"
+              name="password"
+              onChange={handleChange}
+            />
+          </div>
+          <div className="mb-6">
           <label className="block mb-2 text-sm font-bold text-gray-700">
             Phone Number:
           </label>
@@ -158,17 +237,60 @@ const SignUp = () => {
             onChange={handleChange}
           />
         </div>
+    
+        <div className="mb-4">
+          <label className="block mb-2 text-sm font-bold text-gray-700">
+            Rating
+          </label>
+          <input
+            className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+            type="number"
+            name="Rating"
+            onChange={handleChange}
+          />
+        </div>
+        <div className="mb-4">
+      <label className="block mb-2 text-sm font-bold text-gray-700">
+        Specialization:
+      </label>
+      <select
+        className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+        name="specialization"
+        onChange={handleChange}
+      >
+        <option value="">Select Specialization</option>
+        <option value="General Physician">General Physician</option>
+        <option value="Cardiologist">Cardiologist</option>
+        <option value="Dermatologist">Dermatologist</option>
+        <option value="Orthopedic Surgeon">Orthopedic Surgeon</option>
+        <option value="Pediatrician">Pediatrician</option>
+      </select>
+    </div>
+        {/* <div className="mb-4">
+          <label className="block mb-2 text-sm font-bold text-gray-700">
+            Address:
+          </label>
+          <input
+            className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+            type="text"
+            name="address"
+            onChange={handleChange}
+          />
+        </div> */}
+        
         <div className="mb-6 text-center">
           <button
             className="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
             type="button"
             onClick={addPatient}
           >
-            Add Patient
+            Add Doctor
           </button>
+        </div>
         </div>
       </form>
     </div>
+  </div>
   );
 };
 
