@@ -43,6 +43,9 @@ app.get("/patients", (req, res) => {
 
 app.post("/add-patient", (req, res) => {
   const {
+    username,
+    email,
+    password,
     first_name,
     last_name,
     date_of_birth,
@@ -51,11 +54,17 @@ app.post("/add-patient", (req, res) => {
     phone_number,
   } = req.body;
 
-  const query =
+  const hashedPassword = bcryptjs.hashSync(password, 10);
+
+  const query1 =
     "INSERT INTO patients (first_name, last_name, date_of_birth, gender, address, phone_number) VALUES (?, ? ,?, ?, ?, ?)";
+  // const query2 =
+  //   "SELECT account_id FROM patients WHERE first_name = ? AND last_name = ?";
+  // const query3 =
+  //   "INSERT INTO accounts (username, email, password, type) VALUES (?, ?, ?, ?)";
 
   db.query(
-    query,
+    query1,
     [first_name, last_name, date_of_birth, gender, address, phone_number],
     (error, data) => {
       if (error) {
@@ -69,4 +78,18 @@ app.post("/add-patient", (req, res) => {
       });
     }
   );
+
+  // db.query(query2, [first_name, last_name], (error, data) => {
+  //   if (error) {
+  //     console.error("Error inserting patient:", error);
+  //     return res.status(500).json({
+  //       error: "Internal Server Error",
+  //     });
+  //   }
+  //   res.status(201).send({
+  //     message: "Patient inserted successfully.",
+  //   });
+  // });
+
+  // const acc_id = 5;
 });

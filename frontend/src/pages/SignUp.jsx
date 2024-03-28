@@ -1,29 +1,37 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import "../App.css";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [dob, setDob] = useState("");
-  const [gender, setGender] = useState("");
-  const [address, setAddress] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [patientDetails, setPatientDetails] = useState({
+    first_name: "",
+    last_name: "",
+    date_of_birth: "",
+    gender: "",
+    address: "",
+    phone_number: "",
+  });
+
+  const formRef = useRef();
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    console.log({ [e.target.name]: e.target.value });
+    setPatientDetails({
+      ...patientDetails,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   const addPatient = () => {
-    const patientDetails = {
-      first_name: firstName,
-      last_name: lastName,
-      date_of_birth: dob,
-      gender: gender,
-      address: address,
-      phone_number: phoneNumber,
-    };
-
     axios
       .post("http://localhost:5000/add-patient", patientDetails)
       .then((response) => {
         console.log(response.data);
+        setPatientDetails({});
+        formRef.current.reset();
+        navigate("/");
       })
       .catch((error) => {
         console.error("Error adding patient:", error);
@@ -32,11 +40,33 @@ const SignUp = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <form className="p-10 bg-white rounded shadow-md w-96">
+      <form ref={formRef} className="p-10 bg-white rounded shadow-md w-96">
         <h2 className="mb-5 text-3xl font-semibold text-center text-gray-700">
           Add Patient
         </h2>
         <div className="mb-4">
+          <div className="mb-4">
+            <label className="block mb-2 text-sm font-bold text-gray-700">
+              Email:
+            </label>
+            <input
+              className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+              type="email"
+              name="email"
+              onChange={handleChange}
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block mb-2 text-sm font-bold text-gray-700">
+              Password:
+            </label>
+            <input
+              className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+              type="password"
+              name="password"
+              onChange={handleChange}
+            />
+          </div>
           <label className="block mb-2 text-sm font-bold text-gray-700">
             First Name:
           </label>
@@ -44,7 +74,7 @@ const SignUp = () => {
             className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
             type="text"
             name="first_name"
-            onChange={(e) => setFirstName(e.target.value)}
+            onChange={handleChange}
           />
         </div>
         <div className="mb-4">
@@ -55,7 +85,7 @@ const SignUp = () => {
             className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
             type="text"
             name="last_name"
-            onChange={(e) => setLastName(e.target.value)}
+            onChange={handleChange}
           />
         </div>
         <div className="mb-4">
@@ -66,7 +96,7 @@ const SignUp = () => {
             className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
             type="date"
             name="date_of_birth"
-            onChange={(e) => setDob(e.target.value)}
+            onChange={handleChange}
           />
         </div>
         <div className="mb-4">
@@ -80,7 +110,7 @@ const SignUp = () => {
                 className="form-radio text-blue-500"
                 name="gender"
                 value="M"
-                onChange={(e) => setGender(e.target.value)}
+                onChange={handleChange}
               />
               <span className="ml-2">Male</span>
             </label>
@@ -90,7 +120,7 @@ const SignUp = () => {
                 className="form-radio text-blue-500"
                 name="gender"
                 value="F"
-                onChange={(e) => setGender(e.target.value)}
+                onChange={handleChange}
               />
               <span className="ml-2">Female</span>
             </label>
@@ -100,7 +130,7 @@ const SignUp = () => {
                 className="form-radio text-blue-500"
                 name="gender"
                 value="O"
-                onChange={(e) => setGender(e.target.value)}
+                onChange={handleChange}
               />
               <span className="ml-2">Other</span>
             </label>
@@ -114,7 +144,7 @@ const SignUp = () => {
             className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
             type="text"
             name="address"
-            onChange={(e) => setAddress(e.target.value)}
+            onChange={handleChange}
           />
         </div>
         <div className="mb-6">
@@ -125,7 +155,7 @@ const SignUp = () => {
             className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
             type="number"
             name="phone_number"
-            onChange={(e) => setPhoneNumber(e.target.value)}
+            onChange={handleChange}
           />
         </div>
         <div className="mb-6 text-center">
