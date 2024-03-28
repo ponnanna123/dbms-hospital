@@ -29,14 +29,6 @@ app.listen(process.env.PORT, () => {
   console.log(`Listening on port ${process.env.PORT}`);
 });
 
-app.get("/", (req, res) => {
-  try {
-    res.json("Homepage");
-  } catch (error) {
-    console.log(error);
-  }
-});
-
 app.get("/patients", (req, res) => {
   const query = "SELECT * FROM patients";
 
