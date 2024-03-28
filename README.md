@@ -1,4 +1,4 @@
-# DBMS Project
+# HealthHub (Hospital Appointment Booking Platform) (DBMS Project)
 
 ## Members:
 
