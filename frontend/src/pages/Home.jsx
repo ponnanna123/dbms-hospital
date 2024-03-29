@@ -6,7 +6,9 @@ const Home = () => {
 
   useEffect(() => {
     const fetchPatients = async () => {
-      const { data } = await axios.get("http://localhost:5000/patients");
+      const { data } = await axios.get(
+        "http://localhost:5000/api/user/patients"
+      );
       setPatients(data);
     };
     fetchPatients();
