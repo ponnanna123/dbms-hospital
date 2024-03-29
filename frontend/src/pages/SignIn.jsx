@@ -18,10 +18,29 @@ const SignIn = () => {
     });
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(account);
+
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/auth/sign-in",
+        account
+      );
+      console.log(response.data);
+      navigate("/");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <div className="flex justify-center">
-        <form className="p-10 bg-white rounded shadow-md w-96 mr-10 mt-5">
+        <form
+          onSubmit={handleSubmit}
+          className="p-10 bg-white rounded shadow-md w-96 mr-10 mt-5"
+        >
           <h2 className="mb-5 text-3xl font-semibold text-center text-gray-700">
             Log In
           </h2>
@@ -49,8 +68,7 @@ const SignIn = () => {
             <div className="mb-6 mt-8 text-center">
               <button
                 className="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
-                type="button"
-                // onClick={handleSubmit}
+                type="submit"
               >
                 Log In
               </button>

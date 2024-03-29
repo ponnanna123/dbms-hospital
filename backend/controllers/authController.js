@@ -103,6 +103,7 @@ export const signin = async (req, res) => {
       });
     }
 
+    console.log(data);
     const account = data[0];
 
     if (!bcryptjs.compareSync(password, account.password)) {
