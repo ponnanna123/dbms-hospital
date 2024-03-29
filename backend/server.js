@@ -1,9 +1,9 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import mysql from "mysql2";
 import authRouter from "./routes/authRouter.js";
 import userRouter from "./routes/userRouter.js";
-import mysql from "mysql2";
 
 dotenv.config();
 

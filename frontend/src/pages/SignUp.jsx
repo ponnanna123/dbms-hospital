@@ -11,6 +11,7 @@ const SignUp = () => {
     gender: "",
     address: "",
     phone_number: "",
+    type: "",
   });
 
   const formRef = useRef();
@@ -31,7 +32,7 @@ const SignUp = () => {
         console.log(response.data);
         setPatientDetails({});
         formRef.current.reset();
-        navigate("/");
+        navigate("/sign-in");
       })
       .catch((error) => {
         console.error("Error adding patient:", error);
@@ -41,6 +42,33 @@ const SignUp = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <div className="flex justify-center">
+        <div className="mb-4">
+          <span className="block mb-2 text-sm font-bold text-gray-700">
+            Select Option:
+          </span>
+          <div className="flex items-center space-x-3">
+            <label className="inline-flex items-center">
+              <input
+                type="radio"
+                className="form-radio text-blue-500"
+                name="type"
+                value="P"
+                onChange={handleChange}
+              />
+              <span className="ml-2">Patient</span>
+            </label>
+            <label className="inline-flex items-center">
+              <input
+                type="radio"
+                className="form-radio text-blue-500"
+                name="type"
+                value="D"
+                onChange={handleChange}
+              />
+              <span className="ml-2">Doctor</span>
+            </label>
+          </div>
+        </div>
         <form
           ref={formRef}
           className="p-10 bg-white rounded shadow-md w-96 mr-10 mt-5 "
@@ -243,18 +271,6 @@ const SignUp = () => {
                 onChange={handleChange}
               />
             </div>
-
-            <div className="mb-4">
-              <label className="block mb-2 text-sm font-bold text-gray-700">
-                Rating
-              </label>
-              <input
-                className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                type="number"
-                name="Rating"
-                onChange={handleChange}
-              />
-            </div>
             <div className="mb-4">
               <label className="block mb-2 text-sm font-bold text-gray-700">
                 Specialization:
@@ -272,18 +288,6 @@ const SignUp = () => {
                 <option value="Pediatrician">Pediatrician</option>
               </select>
             </div>
-            {/* <div className="mb-4">
-          <label className="block mb-2 text-sm font-bold text-gray-700">
-            Address:
-          </label>
-          <input
-            className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-            type="text"
-            name="address"
-            onChange={handleChange}
-          />
-        </div> */}
-
             <div className="mb-6 text-center">
               <button
                 className="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
