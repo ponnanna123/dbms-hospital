@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const SignIn = () => {
   const [account, setAccount] = useState({
@@ -67,11 +67,19 @@ const SignIn = () => {
             />
             <div className="mb-6 mt-8 text-center">
               <button
-                className="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
+                className="w-full px-4 py-2 font-bold text-white bg-red-500 rounded-full hover:bg-red-700 focus:outline-none focus:shadow-outline"
                 type="submit"
               >
                 Log In
               </button>
+            </div>
+            <div className="flex justify-center">
+              <p>
+                Don't have an account?{" "}
+                <span className="text-blue-600">
+                  <Link to={"/sign-up"}>click here</Link>
+                </span>
+              </p>
             </div>
           </div>
         </form>

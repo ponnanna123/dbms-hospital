@@ -53,6 +53,7 @@ const SignUp = () => {
                 className="form-radio text-blue-500"
                 name="type"
                 value="P"
+                checked
                 onChange={handleChange}
               />
               <span className="ml-2">Patient</span>
@@ -197,7 +198,7 @@ const SignUp = () => {
 
             <div className="mb-6 text-center">
               <button
-                className="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
+                className="w-full px-4 py-2 font-bold text-white bg-red-500 rounded-full hover:bg-red-700 focus:outline-none focus:shadow-outline"
                 type="button"
                 onClick={addPatient}
               >
@@ -290,7 +291,7 @@ const SignUp = () => {
             </div>
             <div className="mb-6 text-center">
               <button
-                className="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
+                className="w-full px-4 py-2 font-bold text-white bg-red-500 rounded-full hover:bg-red-700 focus:outline-none focus:shadow-outline"
                 type="button"
                 onClick={addPatient}
               >
