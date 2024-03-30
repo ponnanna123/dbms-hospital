@@ -48,7 +48,7 @@ export const patientsignup = async (req, res) => {
           });
         }
         res.status(201).send({
-          message: "Patient and account created successfully.",
+          message: "Patient account created successfully.",
         });
       });
     }
@@ -91,7 +91,7 @@ export const doctorsignup = async (req, res) => {
           });
         }
         res.status(201).send({
-          message: "Patient and account created successfully.",
+          message: "Doctor account created successfully.",
         });
       });
     }

@@ -8,7 +8,7 @@ import {
 const router = express();
 
 router.post("/sign-up/patient", patientsignup);
-router.post("/sign-up/patient", doctorsignup);
+router.post("/sign-up/doctor", doctorsignup);
 router.post("/sign-in", signin);
 
 export default router;

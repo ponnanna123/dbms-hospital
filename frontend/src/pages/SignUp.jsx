@@ -1,331 +1,49 @@
-import { useRef, useState } from "react";
-import "../App.css";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import PatientForm from "../components/PatientForm";
+import DoctorForm from "../components/DoctorForm";
 
 const SignUp = () => {
-  const [patientDetails, setPatientDetails] = useState({
-    first_name: "",
-    last_name: "",
-    date_of_birth: "",
-    gender: "",
-    address: "",
-    phone_number: "",
-    type: "",
-  });
+  const [selectedOption, setSelectedOption] = useState("patient");
 
-  const [doctorDetails, setDoctorDetails] = useState({
-    first_name: "",
-    last_name: "",
-    email: "",
-    password: "",
-    phone_number: "",
-    specialization: "",
-    type: "",
-  });
-
-  const [type, setType] = useState("P");
-
-  const formRef = useRef();
-  const navigate = useNavigate();
-
-  const handleChange = (e) => {
-    console.log({ [e.target.name]: e.target.value });
-    if (e.target.name === "type") {
-      setType(e.target.value);
-    } else if (type === "P") {
-      setPatientDetails({
-        ...patientDetails,
-        [e.target.name]: e.target.value,
-      });
-    } else {
-      setDoctorDetails({
-        ...doctorDetails,
-        [e.target.name]: e.target.value,
-      });
-    }
-  };
-
-  const addUser = () => {
-    const details = type === "P" ? patientDetails : doctorDetails;
-    axios
-      .post("http://localhost:5000/api/auth/sign-up", details)
-      .then((response) => {
-        console.log(response.data);
-        if (type === "P") {
-          setPatientDetails({});
-        } else {
-          setDoctorDetails({});
-        }
-        formRef.current.reset();
-        navigate("/sign-in");
-      })
-      .catch((error) => {
-        console.error("Error adding patient:", error);
-      });
+  const handleSliderChange = (option) => {
+    setSelectedOption(option);
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <div className="flex justify-center">
-        <div className="mb-4">
-          <span className="block mb-2 text-sm font-bold text-gray-700">
-            Select Option:
-          </span>
-          <div className="flex items-center space-x-3">
-            <label className="inline-flex items-center">
-              <input
-                type="radio"
-                className="form-radio text-blue-500"
-                name="type"
-                value="P"
-                checked
-                onChange={handleChange}
-              />
-              <span className="ml-2">Patient</span>
-            </label>
-            <label className="inline-flex items-center">
-              <input
-                type="radio"
-                className="form-radio text-blue-500"
-                name="type"
-                value="D"
-                onChange={handleChange}
-              />
-              <span className="ml-2">Doctor</span>
-            </label>
-          </div>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 pt-16">
+      <div className="w-full max-w-sm mb-8">
+        <div className="relative rounded-full overflow-hidden bg-red-400 border border-red-500 mt-16">
+          <button
+            onClick={() => handleSliderChange("patient")}
+            className={`${
+              selectedOption === "patient"
+                ? "bg-red-500 text-white"
+                : "text-red-500"
+            } w-1/2 py-2 text-sm font-medium outline-none focus:outline-none transition duration-300 ease-in-out`}
+          >
+            Patient
+          </button>
+          <button
+            onClick={() => handleSliderChange("doctor")}
+            className={`${
+              selectedOption === "doctor"
+                ? "bg-red-500 text-white"
+                : "text-red-500"
+            } w-1/2 py-2 text-sm font-medium outline-none focus:outline-none transition duration-300 ease-in-out`}
+          >
+            Doctor
+          </button>
+          <span
+            className={`absolute top-0 left-0 h-full bg-red-500 transition duration-300 ease-in-out ${
+              selectedOption === "doctor" ? "transform translate-x-full" : ""
+            }`}
+            style={{ width: "50%" }}
+          ></span>
         </div>
-        <form
-          ref={formRef}
-          className="p-10 bg-white rounded shadow-md w-96 mr-10 mt-5 "
-        >
-          <h2 className="mb-5 text-3xl font-semibold text-center text-gray-700">
-            Add Patient
-          </h2>
-          <div className="mb-4">
-            <div className="mb-4 flex">
-              <div className="flex-1 mr-2">
-                <label className="block mb-2 text-sm font-bold text-gray-700">
-                  First Name:
-                </label>
-                <input
-                  className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                  type="text"
-                  name="first_name"
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="flex-1 ml-2">
-                <label className="block mb-2 text-sm font-bold text-gray-700">
-                  Last Name:
-                </label>
-                <input
-                  className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                  type="text"
-                  name="last_name"
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-            <div className="mb-4">
-              <label className="block mb-2 text-sm font-bold text-gray-700">
-                Email:
-              </label>
-              <input
-                className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                type="email"
-                name="email"
-                onChange={handleChange}
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block mb-2 text-sm font-bold text-gray-700">
-                Password:
-              </label>
-              <input
-                className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                type="password"
-                name="password"
-                onChange={handleChange}
-              />
-            </div>
-            <div className="mb-6">
-              <label className="block mb-2 text-sm font-bold text-gray-700">
-                Phone Number:
-              </label>
-              <input
-                className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                type="number"
-                name="phone_number"
-                onChange={handleChange}
-              />
-            </div>
-
-            <div className="mb-4">
-              <label className="block mb-2 text-sm font-bold text-gray-700">
-                Date of Birth:
-              </label>
-              <input
-                className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                type="date"
-                name="date_of_birth"
-                onChange={handleChange}
-              />
-            </div>
-            <div className="mb-4">
-              <span className="block mb-2 text-sm font-bold text-gray-700">
-                Gender:
-              </span>
-              <div className="flex items-center space-x-3">
-                <label className="inline-flex items-center">
-                  <input
-                    type="radio"
-                    className="form-radio text-blue-500"
-                    name="gender"
-                    value="M"
-                    onChange={handleChange}
-                  />
-                  <span className="ml-2">Male</span>
-                </label>
-                <label className="inline-flex items-center">
-                  <input
-                    type="radio"
-                    className="form-radio text-blue-500"
-                    name="gender"
-                    value="F"
-                    onChange={handleChange}
-                  />
-                  <span className="ml-2">Female</span>
-                </label>
-                <label className="inline-flex items-center">
-                  <input
-                    type="radio"
-                    className="form-radio text-blue-500"
-                    name="gender"
-                    value="O"
-                    onChange={handleChange}
-                  />
-                  <span className="ml-2">Other</span>
-                </label>
-              </div>
-            </div>
-            <div className="mb-4">
-              <label className="block mb-2 text-sm font-bold text-gray-700">
-                Address:
-              </label>
-              <input
-                className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                type="text"
-                name="address"
-                onChange={handleChange}
-              />
-            </div>
-
-            <div className="mb-6 text-center">
-              <button
-                className="w-full px-4 py-2 font-bold text-white bg-red-500 rounded-full hover:bg-red-700 focus:outline-none focus:shadow-outline"
-                type="button"
-                onClick={addUser}
-              >
-                Add Patient
-              </button>
-            </div>
-          </div>
-        </form>
-        <form
-          ref={formRef}
-          className="p-10 bg-white rounded shadow-md w-96 mr-10 mt-5 "
-        >
-          <h2 className="mb-5 text-3xl font-semibold text-center text-gray-700">
-            Add Doctor
-          </h2>
-          <div className="mb-4">
-            <div className="mb-4 flex">
-              <div className="flex-1 mr-2">
-                <label className="block mb-2 text-sm font-bold text-gray-700">
-                  First Name:
-                </label>
-                <input
-                  className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                  type="text"
-                  name="first_name"
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="flex-1 ml-2">
-                <label className="block mb-2 text-sm font-bold text-gray-700">
-                  Last Name:
-                </label>
-                <input
-                  className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                  type="text"
-                  name="last_name"
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-            <div className="mb-4">
-              <label className="block mb-2 text-sm font-bold text-gray-700">
-                Email:
-              </label>
-              <input
-                className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                type="email"
-                name="email"
-                onChange={handleChange}
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block mb-2 text-sm font-bold text-gray-700">
-                Password:
-              </label>
-              <input
-                className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                type="password"
-                name="password"
-                onChange={handleChange}
-              />
-            </div>
-            <div className="mb-6">
-              <label className="block mb-2 text-sm font-bold text-gray-700">
-                Phone Number:
-              </label>
-              <input
-                className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                type="number"
-                name="phone_number"
-                onChange={handleChange}
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block mb-2 text-sm font-bold text-gray-700">
-                Specialization:
-              </label>
-              <select
-                className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                name="specialization"
-                onChange={handleChange}
-              >
-                <option value="">Select Specialization</option>
-                <option value="General Physician">General Physician</option>
-                <option value="Cardiologist">Cardiologist</option>
-                <option value="Dermatologist">Dermatologist</option>
-                <option value="Orthopedic Surgeon">Orthopedic Surgeon</option>
-                <option value="Pediatrician">Pediatrician</option>
-              </select>
-            </div>
-            <div className="mb-6 text-center">
-              <button
-                className="w-full px-4 py-2 font-bold text-white bg-red-500 rounded-full hover:bg-red-700 focus:outline-none focus:shadow-outline"
-                type="button"
-                onClick={addUser}
-              >
-                Add Doctor
-              </button>
-            </div>
-          </div>
-        </form>
+      </div>
+      <div className="w-full max-w-md">
+        {selectedOption === "patient" && <PatientForm />}
+        {selectedOption === "doctor" && <DoctorForm />}
       </div>
     </div>
   );
