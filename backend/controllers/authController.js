@@ -1,5 +1,6 @@
 import db from "../server.js";
 import bcryptjs from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 export const signup = async (req, res) => {
   const {
@@ -112,8 +113,14 @@ export const signin = async (req, res) => {
       });
     }
 
-    res.status(200).send({
-      message: "Sign in successful.",
-    });
+    const token = jwt.sign({ email: account.email }, process.env.JWT_KEY);
+    const { password: pass, ...rest } = account;
+    res
+      .cookie("access_token", token, {
+        httpOnly: true,
+        expires: new Date(Date.now() + 24 * 60 * 60 * 100),
+      })
+      .status(200)
+      .send(rest);
   });
 };

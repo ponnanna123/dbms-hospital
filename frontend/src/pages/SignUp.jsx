@@ -14,23 +14,49 @@ const SignUp = () => {
     type: "",
   });
 
+  const [doctorDetails, setDoctorDetails] = useState({
+    first_name: "",
+    last_name: "",
+    email: "",
+    password: "",
+    phone_number: "",
+    specialization: "",
+    type: "",
+  });
+
+  const [type, setType] = useState("P");
+
   const formRef = useRef();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     console.log({ [e.target.name]: e.target.value });
-    setPatientDetails({
-      ...patientDetails,
-      [e.target.name]: e.target.value,
-    });
+    if (e.target.name === "type") {
+      setType(e.target.value);
+    } else if (type === "P") {
+      setPatientDetails({
+        ...patientDetails,
+        [e.target.name]: e.target.value,
+      });
+    } else {
+      setDoctorDetails({
+        ...doctorDetails,
+        [e.target.name]: e.target.value,
+      });
+    }
   };
 
-  const addPatient = () => {
+  const addUser = () => {
+    const details = type === "P" ? patientDetails : doctorDetails;
     axios
-      .post("http://localhost:5000/api/auth/sign-up", patientDetails)
+      .post("http://localhost:5000/api/auth/sign-up", details)
       .then((response) => {
         console.log(response.data);
-        setPatientDetails({});
+        if (type === "P") {
+          setPatientDetails({});
+        } else {
+          setDoctorDetails({});
+        }
         formRef.current.reset();
         navigate("/sign-in");
       })
@@ -200,7 +226,7 @@ const SignUp = () => {
               <button
                 className="w-full px-4 py-2 font-bold text-white bg-red-500 rounded-full hover:bg-red-700 focus:outline-none focus:shadow-outline"
                 type="button"
-                onClick={addPatient}
+                onClick={addUser}
               >
                 Add Patient
               </button>
@@ -293,7 +319,7 @@ const SignUp = () => {
               <button
                 className="w-full px-4 py-2 font-bold text-white bg-red-500 rounded-full hover:bg-red-700 focus:outline-none focus:shadow-outline"
                 type="button"
-                onClick={addPatient}
+                onClick={addUser}
               >
                 Add Doctor
               </button>
