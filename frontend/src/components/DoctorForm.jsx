@@ -45,9 +45,6 @@ const DoctorForm = () => {
           ref={formRef}
           className="p-10 bg-white rounded shadow-md w-96 mr-10 mt-5"
         >
-          <h2 className="mb-5 text-3xl font-semibold text-center text-gray-700">
-            Register Doctor
-          </h2>
           <div className="mb-4 flex space-x-5">
             <div className="w-1/2 pr-2">
               <label className="block mb-2 text-sm font-bold text-gray-700">
@@ -126,11 +123,11 @@ const DoctorForm = () => {
           </div>
           <div className="mb-6 mt-8 text-center">
             <button
-              className="w-full px-4 py-2 font-bold text-white bg-red-500 rounded-full hover:bg-red-700 focus:outline-none focus:shadow-outline"
+              className="w-full px-4 py-2 font-bold text-white bg-green-500 rounded-full hover:bg-green-700 focus:outline-none focus:shadow-outline"
               type="submit"
               onClick={addDoctor}
             >
-              Sign Up
+              Register
             </button>
           </div>
         </form>
