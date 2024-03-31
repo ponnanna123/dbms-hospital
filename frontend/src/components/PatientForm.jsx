@@ -39,13 +39,13 @@ const PatientForm = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-green-200">
       <div className="flex justify-center">
         <form
           ref={formRef}
           className="p-10 bg-white rounded shadow-md w-96 mr-10 mt-5"
         >
-          <div className="mb-4 flex space-x-5">
+          <div className="mb-4 flex space-x-1">
             <div className="w-1/2 pr-2">
               <label className="block mb-2 text-sm font-bold text-gray-700">
                 First Name:
@@ -99,19 +99,8 @@ const PatientForm = () => {
               className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
               type="tel"
               name="phone_number"
-              pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-              maxLength="12"
-              onChange={handleChange}
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block mb-2 text-sm font-bold text-gray-700">
-              Date of Birth:
-            </label>
-            <input
-              className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-              type="date"
-              name="date_of_birth"
+              pattern="[0-9]{10}"
+              maxLength="10"
               onChange={handleChange}
             />
           </div>
@@ -154,13 +143,25 @@ const PatientForm = () => {
           </div>
           <div className="mb-4">
             <label className="block mb-2 text-sm font-bold text-gray-700">
+              Date of Birth:
+            </label>
+            <input
+              className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+              type="date"
+              name="date_of_birth"
+              onChange={handleChange}
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block mb-2 text-sm font-bold text-gray-700">
               Address:
             </label>
-            <textarea
+            <input
+              type="text"
               className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
               name="address"
               onChange={handleChange}
-            ></textarea>
+            ></input>
           </div>
           <div className="mb-6 mt-8 text-center">
             <button

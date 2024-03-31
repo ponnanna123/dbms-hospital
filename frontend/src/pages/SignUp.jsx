@@ -10,7 +10,7 @@ const SignUp = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 pt-16">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-green-200 pt-16">
       <div className="w-full max-w-sm mb-1 transform -translate-x-5">
         <h2 className="mt-10 -mb-11 text-2xl text-center text-green-800">
           Select type of account to create:
