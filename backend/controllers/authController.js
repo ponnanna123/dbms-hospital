@@ -62,19 +62,29 @@ export const doctorsignup = async (req, res) => {
     first_name,
     last_name,
     phone_number,
-    specialization,
+    specialization_id,
+    department_id,
+    gender,
     type,
   } = req.body;
   const hashedPassword = bcryptjs.hashSync(password, 10);
 
   const query1 =
-    "INSERT INTO doctors (first_name, last_name, specialization, phone_number, email) VALUES (?, ?, ?, ?, ?)";
+    "INSERT INTO doctors (first_name, last_name, specialization_id, department_id, gender, phone_number, email) VALUES (?, ?, ?, ?, ?, ?, ?)";
   const query2 =
     "INSERT INTO accounts (email, password, type) VALUES (?, ? ,?)";
 
   db.query(
     query1,
-    [first_name, last_name, specialization, phone_number, email],
+    [
+      first_name,
+      last_name,
+      specialization_id,
+      department_id,
+      gender,
+      phone_number,
+      email,
+    ],
     (error, data) => {
       if (error) {
         console.error("Error inserting patient:", error);
