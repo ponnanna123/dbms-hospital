@@ -45,6 +45,7 @@ const DoctorForm = () => {
         <form
           ref={formRef}
           className="p-10 bg-white rounded shadow-md w-96 mr-10 mt-5"
+          onSubmit={addDoctor}
         >
           <div className="mb-4 flex space-x-1">
             <div className="w-1/2 pr-2">
@@ -78,7 +79,6 @@ const DoctorForm = () => {
               className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
               type="email"
               name="email"
-              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}"
               onChange={handleChange}
             />
           </div>
@@ -186,7 +186,6 @@ const DoctorForm = () => {
             <button
               className="w-full px-4 py-2 font-bold text-white bg-green-500 rounded-full hover:bg-green-700 focus:outline-none focus:shadow-outline"
               type="submit"
-              onClick={addDoctor}
             >
               Register
             </button>

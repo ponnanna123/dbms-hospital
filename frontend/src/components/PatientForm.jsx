@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 
 const PatientForm = () => {
   const [patientDetails, setPatientDetails] = useState({
+    email: "",
+    password: "",
     first_name: "",
     last_name: "",
     date_of_birth: "",
@@ -24,7 +26,8 @@ const PatientForm = () => {
     });
   };
 
-  const addPatient = () => {
+  const addPatient = (e) => {
+    e.preventDefault();
     axios
       .post("/api/auth/sign-up/patient", patientDetails)
       .then((response) => {
@@ -44,6 +47,7 @@ const PatientForm = () => {
         <form
           ref={formRef}
           className="p-10 bg-white rounded shadow-md w-96 mr-10 mt-5"
+          onSubmit={addPatient}
         >
           <div className="mb-4 flex space-x-1">
             <div className="w-1/2 pr-2">
@@ -77,7 +81,6 @@ const PatientForm = () => {
               className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
               type="email"
               name="email"
-              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}"
               onChange={handleChange}
             />
           </div>
@@ -168,7 +171,6 @@ const PatientForm = () => {
             <button
               className="w-full px-4 py-2 font-bold text-white bg-green-500 rounded-full hover:bg-green-700 focus:outline-none focus:shadow-outline"
               type="submit"
-              onClick={addPatient}
             >
               Register
             </button>
