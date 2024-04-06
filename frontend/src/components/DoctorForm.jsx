@@ -4,15 +4,16 @@ import { useNavigate } from "react-router-dom";
 
 const DoctorForm = () => {
   const [doctorDetails, setDoctorDetails] = useState({
-    first_name: "",
-    last_name: "",
     email: "",
     password: "",
+    first_name: "",
+    last_name: "",
     phone_number: "",
     specialization_id: "",
     department_id: "",
     type: "D",
   });
+  const [error, setError] = useState("");
 
   const formRef = useRef();
   const navigate = useNavigate();
@@ -25,7 +26,8 @@ const DoctorForm = () => {
     });
   };
 
-  const addDoctor = () => {
+  const addDoctor = (e) => {
+    e.preventDefault();
     axios
       .post("/api/auth/sign-up/doctor", doctorDetails)
       .then((response) => {
@@ -34,8 +36,9 @@ const DoctorForm = () => {
         formRef.current.reset();
         navigate("/sign-in");
       })
-      .catch((error) => {
-        console.error("Error adding doctor:", error);
+      .catch((err) => {
+        console.log(err);
+        setError(err);
       });
   };
 
@@ -189,6 +192,9 @@ const DoctorForm = () => {
             >
               Register
             </button>
+          </div>
+          <div className="text-center">
+            <p style={{ color: "red" }}>{error && "Error adding doctor"}</p>
           </div>
         </form>
       </div>

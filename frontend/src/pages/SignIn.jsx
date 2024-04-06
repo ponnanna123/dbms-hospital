@@ -1,4 +1,5 @@
 import axios from "axios";
+import bcryptjs from "bcryptjs";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -7,6 +8,7 @@ const SignIn = () => {
     email: "",
     password: "",
   });
+  const [error, setError] = useState("");
 
   const navigate = useNavigate();
 
@@ -20,7 +22,6 @@ const SignIn = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(account);
     axios.defaults.withCredentials = true;
     axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
     axios.defaults.xsrfCookieName = "csrftoken";
@@ -30,9 +31,20 @@ const SignIn = () => {
         account
       );
       console.log(response.data);
-      navigate("/");
-    } catch (error) {
-      console.error(error);
+
+      const hid = bcryptjs.hashSync(response.data.email, 10);
+
+      if (response.data.type === "P") {
+        navigate(`/patient/${hid}`);
+      } else if (response.data.type === "D") {
+        navigate(`/doctor/${hid}`);
+      } else {
+        console.error("Invalid account type");
+        setError("Invalid account type");
+      }
+    } catch (err) {
+      console.error(err);
+      setError(err);
     }
   };
 
@@ -81,6 +93,11 @@ const SignIn = () => {
                 <span className="text-blue-600">
                   <Link to={"/sign-up"}>click here</Link>
                 </span>
+              </p>
+            </div>
+            <div className="text-center">
+              <p style={{ color: "red" }}>
+                {error && "Invalid email or password"}
               </p>
             </div>
           </div>

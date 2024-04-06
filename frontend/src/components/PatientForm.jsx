@@ -14,6 +14,7 @@ const PatientForm = () => {
     phone_number: "",
     type: "P",
   });
+  const [error, setError] = useState("");
 
   const formRef = useRef();
   const navigate = useNavigate();
@@ -36,8 +37,9 @@ const PatientForm = () => {
         formRef.current.reset();
         navigate("/sign-in");
       })
-      .catch((error) => {
-        console.error("Error adding patient:", error);
+      .catch((err) => {
+        console.log(err);
+        setError(err);
       });
   };
 
@@ -174,6 +176,9 @@ const PatientForm = () => {
             >
               Register
             </button>
+          </div>
+          <div className="text-center">
+            <p style={{ color: "red" }}>{error && "Error adding patient"}</p>
           </div>
         </form>
       </div>

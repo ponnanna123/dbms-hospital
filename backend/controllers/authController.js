@@ -127,7 +127,6 @@ export const signin = async (req, res) => {
       });
     }
 
-    console.log(data);
     const account = data[0];
 
     if (!bcryptjs.compareSync(password, account.password)) {
@@ -141,7 +140,7 @@ export const signin = async (req, res) => {
     res
       .cookie("access_token", token, {
         httpOnly: true,
-        expires: new Date(Date.now() + 24 * 60 * 60 * 100),
+        expires: new Date(Date.now() + 24 * 60 * 60 * 365),
       })
       .status(200)
       .send(rest);
