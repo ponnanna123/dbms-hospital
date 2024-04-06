@@ -135,7 +135,7 @@ export const signin = async (req, res) => {
       });
     }
 
-    const token = jwt.sign({ email: account.email }, process.env.JWT_KEY);
+    const token = jwt.sign({ id: account.account_id }, process.env.JWT_KEY);
     const { password: pass, ...rest } = account;
     res
       .cookie("access_token", token, {
@@ -145,4 +145,36 @@ export const signin = async (req, res) => {
       .status(200)
       .send(rest);
   });
+};
+
+export const google = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const query = "SELECT * FROM accounts WHERE email = ?";
+
+    db.query(query, [email], (error, data) => {
+      if (data.length) {
+        const account = data[0];
+        const token = jwt.sign({ id: account.account_id }, process.env.JWT_KEY);
+        const { password: pass, ...rest } = account;
+        res
+          .cookie("access_token", token, {
+            httpOnly: true,
+            expires: new Date(Date.now() + 24 * 60 * 60 * 365),
+          })
+          .status(200)
+          .send(rest);
+      } else {
+        const generatedPassword =
+          Math.random().toString(36).slice(-8) +
+          Math.random().toString(36).slice(-8);
+        const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
+        const query1 =
+          "INSERT INTO accounts (email, password, type) VALUES (?, ?, ?)";
+        const query2 = "INSERT INTO patients (email) VALUES (?)";
+      }
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };

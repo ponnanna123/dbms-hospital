@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import OAuth from "./OAuth";
 
 const PatientForm = () => {
   const [patientDetails, setPatientDetails] = useState({
@@ -15,6 +16,7 @@ const PatientForm = () => {
     type: "P",
   });
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const formRef = useRef();
   const navigate = useNavigate();
@@ -28,6 +30,7 @@ const PatientForm = () => {
   };
 
   const addPatient = (e) => {
+    setLoading(true);
     e.preventDefault();
     axios
       .post("/api/auth/sign-up/patient", patientDetails)
@@ -51,6 +54,7 @@ const PatientForm = () => {
           className="p-10 bg-white rounded shadow-md w-96 mr-10 mt-5"
           onSubmit={addPatient}
         >
+          <OAuth />
           <div className="mb-4 flex space-x-1">
             <div className="w-1/2 pr-2">
               <label className="block mb-2 text-sm font-bold text-gray-700">
@@ -171,10 +175,11 @@ const PatientForm = () => {
           </div>
           <div className="mb-6 mt-8 text-center">
             <button
-              className="w-full px-4 py-2 font-bold text-white bg-green-500 rounded-full hover:bg-green-700 focus:outline-none focus:shadow-outline"
+              className="w-full px-4 py-2 font-bold text-white bg-green-500 rounded-full hover:bg-green-700 disabled:bg-green-400 focus:outline-none focus:shadow-outline"
               type="submit"
+              disabled={loading}
             >
-              Register
+              {loading ? "Loading..." : "Register"}
             </button>
           </div>
           <div className="text-center">

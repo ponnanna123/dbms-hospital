@@ -22,7 +22,7 @@ const SignUp = () => {
               selectedOption === "patient"
                 ? "bg-green-500 text-white"
                 : "text-green-500"
-            } w-1/2 py-2 text-lg font-medium outline-none focus:outline-none transition duration-300 ease-in-out`}
+            } w-1/2 py-2 text-lg font-bold outline-none focus:outline-none transition duration-300 ease-in-out`}
           >
             Patient
           </button>
@@ -32,7 +32,7 @@ const SignUp = () => {
               selectedOption === "doctor"
                 ? "bg-green-500 text-white"
                 : "text-green-500"
-            } w-1/2 py-2 text-lg font-medium outline-none focus:outline-none transition duration-300 ease-in-out`}
+            } w-1/2 py-2 text-lg font-bold outline-none focus:outline-none transition duration-300 ease-in-out`}
           >
             Doctor
           </button>

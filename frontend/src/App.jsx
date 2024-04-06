@@ -6,6 +6,7 @@ import SignIn from "./pages/SignIn.jsx";
 import About from "./pages/About.jsx";
 import PatientUI from "./pages/PatientUI.jsx";
 import DoctorUI from "./pages/DoctorUI.jsx";
+import Footer from "./components/Footer.jsx";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/patient/:id" element={<PatientUI />} />
         <Route path="/doctor/:id" element={<DoctorUI />} />
       </Routes>
+      <Footer />
     </BrowserRouter>
   );
 }
