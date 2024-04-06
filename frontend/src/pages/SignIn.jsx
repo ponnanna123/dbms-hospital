@@ -32,7 +32,8 @@ const SignIn = () => {
       );
       console.log(response.data);
 
-      const hid = bcryptjs.hashSync(response.data.email, 10);
+      let hid = bcryptjs.hashSync(response.data.email, 10);
+      hid = hid.replace(/\W/g, "").slice(5);
 
       if (response.data.type === "P") {
         navigate(`/patient/${hid}`);
