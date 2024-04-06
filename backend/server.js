@@ -27,7 +27,14 @@ db.connect(() => {
 export default db;
 
 app.use(express.json());
-app.use(cors());
+
+var corsOptions = {
+  origin: "http://localhost:5173",
+  credentials: true,
+  optionsSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
 
 app.listen(process.env.PORT, () => {
   console.log(`Listening on port ${process.env.PORT}`);
