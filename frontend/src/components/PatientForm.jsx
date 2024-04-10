@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import OAuth from "./OAuth";
 
-const PatientForm = () => {
+const PatientForm = ({ selectedOption }) => {
   const [patientDetails, setPatientDetails] = useState({
     email: "",
     password: "",
@@ -54,7 +54,7 @@ const PatientForm = () => {
           className="p-10 bg-white rounded shadow-md w-96 mr-10 mt-5"
           onSubmit={addPatient}
         >
-          <OAuth />
+          <OAuth selectedOption={selectedOption} />
           <div className="mb-4 flex space-x-1">
             <div className="w-1/2 pr-2">
               <label className="block mb-2 text-sm font-bold text-gray-700">

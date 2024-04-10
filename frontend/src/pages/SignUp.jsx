@@ -1,9 +1,10 @@
 import { useState } from "react";
 import PatientForm from "../components/PatientForm";
 import DoctorForm from "../components/DoctorForm";
+import OAuth from "../components/OAuth";
 
 const SignUp = () => {
-  const [selectedOption, setSelectedOption] = useState("patient");
+  const [selectedOption, setSelectedOption] = useState("P");
 
   const handleSliderChange = (option) => {
     setSelectedOption(option);
@@ -17,7 +18,7 @@ const SignUp = () => {
         </h2>
         <div className="relative rounded-full overflow-hidden bg-white border border-green-700 mt-16">
           <button
-            onClick={() => handleSliderChange("patient")}
+            onClick={() => handleSliderChange("P")}
             className={`${
               selectedOption === "patient"
                 ? "bg-green-500 text-white"
@@ -27,7 +28,7 @@ const SignUp = () => {
             Patient
           </button>
           <button
-            onClick={() => handleSliderChange("doctor")}
+            onClick={() => handleSliderChange("D")}
             className={`${
               selectedOption === "doctor"
                 ? "bg-green-500 text-white"
@@ -45,8 +46,12 @@ const SignUp = () => {
         </div>
       </div>
       <div className="w-full max-w-md">
-        {selectedOption === "patient" && <PatientForm />}
-        {selectedOption === "doctor" && <DoctorForm />}
+        {selectedOption === "P" && (
+          <PatientForm selectedOption={selectedOption} />
+        )}
+        {selectedOption === "D" && (
+          <DoctorForm selectedOption={selectedOption} />
+        )}
       </div>
     </div>
   );

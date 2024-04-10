@@ -1,16 +1,25 @@
 import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { app } from "../firebase";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-const OAuth = () => {
+const OAuth = ({ selectedOption }) => {
+  const navigate = useNavigate();
   const handleGoogleLogin = async () => {
     try {
       const provider = new GoogleAuthProvider();
       const auth = getAuth(app);
       const result = await signInWithPopup(auth, provider);
       console.log(result);
-      const res = await axios.post("/api/auth/google", {
-        email: result.user.email,
-      });
+      const res = await axios
+        .post("/api/auth/google", {
+          email: result.user.email,
+          type: selectedOption,
+        })
+        .then((res) => {
+          console.log(res.data);
+          navigate("/");
+        });
     } catch (error) {
       console.log("Could not sign in with Google", error);
     }
@@ -23,7 +32,7 @@ const OAuth = () => {
         type="button"
         onClick={handleGoogleLogin}
       >
-        Register With Google
+        Continue With Google
       </button>
     </div>
   );

@@ -14,6 +14,8 @@ const db = mysql.createConnection({
   user: "root",
   password: process.env.DB_PASS,
   database: process.env.DB_SCHEMA,
+  // Not recommended; vulnerable to SQL injection attacks
+  /* multipleStatements: true, */
 });
 
 db.connect(() => {

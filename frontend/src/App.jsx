@@ -7,6 +7,9 @@ import About from "./pages/About.jsx";
 import PatientUI from "./pages/PatientUI.jsx";
 import DoctorUI from "./pages/DoctorUI.jsx";
 import Footer from "./components/Footer.jsx";
+import Blog from "./pages/Blog.jsx";
+import Contact from "./pages/Contact.jsx";
+import Services from "./pages/Services.jsx";
 
 function App() {
   return (
@@ -19,6 +22,9 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/patient/:id" element={<PatientUI />} />
         <Route path="/doctor/:id" element={<DoctorUI />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/services" element={<Services />} />
       </Routes>
       <Footer />
     </BrowserRouter>

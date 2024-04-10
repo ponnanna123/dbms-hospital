@@ -149,7 +149,7 @@ export const signin = async (req, res) => {
 
 export const google = async (req, res) => {
   try {
-    const { email } = req.body;
+    const { email, type } = req.body;
     const query = "SELECT * FROM accounts WHERE email = ?";
 
     db.query(query, [email], (error, data) => {
@@ -171,7 +171,29 @@ export const google = async (req, res) => {
         const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
         const query1 =
           "INSERT INTO accounts (email, password, type) VALUES (?, ?, ?)";
-        const query2 = "INSERT INTO patients (email) VALUES (?)";
+        db.query(query1, [email, hashedPassword, type], (error, result) => {
+          if (error) {
+            console.log(error);
+          } else {
+            const query2 = "SELECT LAST_INSERT_ID() as account_id";
+            db.query(query2, (error, result) => {
+              if (error) {
+                console.log(error);
+              } else {
+                const account_id = result[0].account_id;
+                const token = jwt.sign({ id: account_id }, process.env.JWT_KEY);
+                const { password: pass, ...rest } = account;
+                res
+                  .cookie("access_token", token, {
+                    httpOnly: true,
+                    expires: new Date(Date.now() + 24 * 60 * 60 * 365),
+                  })
+                  .status(200)
+                  .send(rest);
+              }
+            });
+          }
+        });
       }
     });
   } catch (error) {
