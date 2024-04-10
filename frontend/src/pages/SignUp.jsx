@@ -20,7 +20,7 @@ const SignUp = () => {
           <button
             onClick={() => handleSliderChange("P")}
             className={`${
-              selectedOption === "patient"
+              selectedOption === "P"
                 ? "bg-green-500 text-white"
                 : "text-green-500"
             } w-1/2 py-2 text-lg font-bold outline-none focus:outline-none transition duration-300 ease-in-out`}
@@ -30,7 +30,7 @@ const SignUp = () => {
           <button
             onClick={() => handleSliderChange("D")}
             className={`${
-              selectedOption === "doctor"
+              selectedOption === "D"
                 ? "bg-green-500 text-white"
                 : "text-green-500"
             } w-1/2 py-2 text-lg font-bold outline-none focus:outline-none transition duration-300 ease-in-out`}

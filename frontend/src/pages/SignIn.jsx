@@ -3,15 +3,22 @@ import bcryptjs from "bcryptjs";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import OAuth from "../components/OAuth";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  signInStart,
+  signInSuccess,
+  signInFailure,
+} from "../redux/user/userSlice";
 
 const SignIn = () => {
   const [account, setAccount] = useState({
     email: "",
     password: "",
   });
-  const [error, setError] = useState("");
+  const { loading, error } = useSelector((state) => state.user);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     console.log({ [e.target.name]: e.target.value });
@@ -27,6 +34,7 @@ const SignIn = () => {
     axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
     axios.defaults.xsrfCookieName = "csrftoken";
     try {
+      dispatch(signInStart());
       const response = await axios.post(
         "http://localhost:5000/api/auth/sign-in",
         account
@@ -37,16 +45,17 @@ const SignIn = () => {
       hid = hid.replace(/\W/g, "").slice(5);
 
       if (response.data.type === "P") {
+        dispatch(signInSuccess(response));
         navigate(`/patient/${hid}`);
       } else if (response.data.type === "D") {
+        dispatch(signInSuccess(response));
         navigate(`/doctor/${hid}`);
       } else {
-        console.error("Invalid account type");
-        setError("Invalid account type");
+        dispatch(signInFailure("Invalid account type"));
+        return;
       }
     } catch (err) {
-      console.error(err);
-      setError(err);
+      dispatch(signInFailure(err));
     }
   };
 
@@ -57,7 +66,7 @@ const SignIn = () => {
           onSubmit={handleSubmit}
           className="p-10 bg-white rounded shadow-md w-96 mr-10 mt-5"
         >
-          <h2 className="mb-5 text-3xl font-semibold text-center text-gray-700 mb-14">
+          <h2 className="text-3xl font-semibold text-center text-gray-700 mb-14">
             Log In
           </h2>
           <OAuth />
@@ -84,10 +93,16 @@ const SignIn = () => {
             />
             <div className="mb-6 mt-8 text-center">
               <button
-                className="w-full px-4 py-2 font-bold text-white bg-green-500 rounded-full hover:bg-green-700 focus:outline-none focus:shadow-outline"
+                className={`w-full px-4 py-2 font-bold text-white rounded-full focus:outline-none focus:shadow-outline 
+                  ${
+                    loading
+                      ? "bg-green-300 cursor-not-allowed"
+                      : "bg-green-500 hover:bg-green-700"
+                  }`}
                 type="submit"
+                disabled={loading}
               >
-                Log In
+                {loading ? "Loading..." : "Log In"}
               </button>
             </div>
             <div className="flex justify-center">

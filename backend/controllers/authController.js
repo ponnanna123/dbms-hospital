@@ -169,31 +169,31 @@ export const google = async (req, res) => {
           Math.random().toString(36).slice(-8) +
           Math.random().toString(36).slice(-8);
         const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
-        const query1 =
-          "INSERT INTO accounts (email, password, type) VALUES (?, ?, ?)";
-        db.query(query1, [email, hashedPassword, type], (error, result) => {
-          if (error) {
-            console.log(error);
-          } else {
-            const query2 = "SELECT LAST_INSERT_ID() as account_id";
-            db.query(query2, (error, result) => {
-              if (error) {
-                console.log(error);
-              } else {
-                const account_id = result[0].account_id;
-                const token = jwt.sign({ id: account_id }, process.env.JWT_KEY);
-                const { password: pass, ...rest } = account;
-                res
-                  .cookie("access_token", token, {
-                    httpOnly: true,
-                    expires: new Date(Date.now() + 24 * 60 * 60 * 365),
-                  })
-                  .status(200)
-                  .send(rest);
-              }
-            });
-          }
-        });
+
+        try {
+          db.query(
+            "INSERT INTO accounts (email, password, type) VALUES (?, ?, ?)",
+            [email, hashedPassword, type]
+          );
+          const result1 = db.query("SELECT LAST_INSERT_ID() as account_id");
+          const account_id = result1[0].account_id;
+          const result2 = db.query(
+            "SELECT * FROM accounts WHERE account_id = ?",
+            [account_id]
+          );
+          const account = result2[0];
+          const token = jwt.sign({ id: account_id }, process.env.JWT_KEY);
+          const { password: pass, ...rest } = account;
+          res
+            .cookie("access_token", token, {
+              httpOnly: true,
+              expires: new Date(Date.now() + 24 * 60 * 60 * 365),
+            })
+            .status(200)
+            .send(rest);
+        } catch (error) {
+          console.log(error);
+        }
       }
     });
   } catch (error) {

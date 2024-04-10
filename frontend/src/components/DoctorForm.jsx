@@ -2,6 +2,12 @@ import { useRef, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import OAuth from "./OAuth";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  signInStart,
+  signInSuccess,
+  signInFailure,
+} from "../redux/user/userSlice";
 
 const DoctorForm = ({ selectedOption }) => {
   const [doctorDetails, setDoctorDetails] = useState({
@@ -14,11 +20,11 @@ const DoctorForm = ({ selectedOption }) => {
     department_id: "",
     type: "D",
   });
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const { loading, error } = useSelector((state) => state.user);
 
   const formRef = useRef();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     console.log({ [e.target.name]: e.target.value });
@@ -29,7 +35,7 @@ const DoctorForm = ({ selectedOption }) => {
   };
 
   const addDoctor = (e) => {
-    setLoading(true);
+    dispatch(signInStart());
     e.preventDefault();
     axios
       .post("/api/auth/sign-up/doctor", doctorDetails)
@@ -37,11 +43,11 @@ const DoctorForm = ({ selectedOption }) => {
         console.log(response.data);
         setDoctorDetails({});
         formRef.current.reset();
+        dispatch(signInSuccess(response));
         navigate("/sign-in");
       })
       .catch((err) => {
-        console.log(err);
-        setError(err);
+        dispatch(signInFailure(err));
       });
   };
 
