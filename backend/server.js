@@ -30,13 +30,21 @@ export default db;
 
 app.use(express.json());
 
-var corsOptions = {
-  origin: "http://localhost:5173",
-  credentials: true,
-  optionsSuccessStatus: 200,
-};
+// Will be used in production
 
-app.use(cors(corsOptions));
+// var corsOptions = {
+//   origin: "http://localhost:5173",
+//   credentials: true,
+//   optionsSuccessStatus: 200,
+// };
+
+// app.use(cors(corsOptions));
+app.use(
+  cors({
+    credentials: true,
+    optionsSuccessStatus: 200,
+  })
+);
 
 app.listen(process.env.PORT, () => {
   console.log(`Listening on port ${process.env.PORT}`);

@@ -149,10 +149,15 @@ export const signin = async (req, res) => {
 
 export const google = async (req, res) => {
   try {
-    const { email, type } = req.body;
+    const { email, type, profile_url } = req.body;
     const query = "SELECT * FROM accounts WHERE email = ?";
 
     db.query(query, [email], (error, data) => {
+      if (error) {
+        console.error(error);
+        return res.status(500).send("An error occurred");
+      }
+
       if (data.length) {
         const account = data[0];
         const token = jwt.sign({ id: account.account_id }, process.env.JWT_KEY);
@@ -170,33 +175,61 @@ export const google = async (req, res) => {
           Math.random().toString(36).slice(-8);
         const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
 
-        try {
-          db.query(
-            "INSERT INTO accounts (email, password, type) VALUES (?, ?, ?)",
-            [email, hashedPassword, type]
-          );
-          const result1 = db.query("SELECT LAST_INSERT_ID() as account_id");
-          const account_id = result1[0].account_id;
-          const result2 = db.query(
-            "SELECT * FROM accounts WHERE account_id = ?",
-            [account_id]
-          );
-          const account = result2[0];
-          const token = jwt.sign({ id: account_id }, process.env.JWT_KEY);
-          const { password: pass, ...rest } = account;
-          res
-            .cookie("access_token", token, {
-              httpOnly: true,
-              expires: new Date(Date.now() + 24 * 60 * 60 * 365),
-            })
-            .status(200)
-            .send(rest);
-        } catch (error) {
-          console.log(error);
-        }
+        db.query(
+          "INSERT INTO accounts (email, password, type, profile_url) VALUES (?, ?, ?, ?)",
+          [email, hashedPassword, type, profile_url],
+          (insertError) => {
+            if (insertError) {
+              console.error(insertError);
+              return res
+                .status(500)
+                .send("An error occurred during account creation");
+            }
+            db.query(
+              "SELECT LAST_INSERT_ID() as account_id",
+              (lastIdError, result1) => {
+                if (lastIdError) {
+                  console.error(lastIdError);
+                  return res
+                    .status(500)
+                    .send("An error occurred fetching the new account ID");
+                }
+
+                const account_id = result1[0].account_id;
+                db.query(
+                  "SELECT * FROM accounts WHERE account_id = ?",
+                  [account_id],
+                  (selectError, result2) => {
+                    if (selectError) {
+                      console.error(selectError);
+                      return res
+                        .status(500)
+                        .send("An error occurred fetching the new account");
+                    }
+
+                    const account = result2[0];
+                    const token = jwt.sign(
+                      { id: account_id },
+                      process.env.JWT_KEY
+                    );
+                    const { password: pass, ...rest } = account;
+                    res
+                      .cookie("access_token", token, {
+                        httpOnly: true,
+                        expires: new Date(Date.now() + 24 * 60 * 60 * 365),
+                      })
+                      .status(200)
+                      .send(rest);
+                  }
+                );
+              }
+            );
+          }
+        );
       }
     });
   } catch (error) {
     console.log(error);
+    res.status(500).send("An unexpected error occurred");
   }
 };

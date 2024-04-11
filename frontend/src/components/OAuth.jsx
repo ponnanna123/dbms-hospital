@@ -26,6 +26,7 @@ const OAuth = ({ selectedOption }) => {
         .post("/api/auth/google", {
           email: result.user.email,
           type: selectedOption,
+          profile_url: result.user.photoURL,
         })
         .then((response) => {
           console.log(response.data);
