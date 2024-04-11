@@ -14,6 +14,7 @@ import DoctorDashboard from "./pages/DoctorDashboard.jsx";
 import PrivateProfile from "./components/PrivateProfile.jsx";
 import PrivatePatient from "./components/PrivatePatient.jsx";
 import PrivateDoctor from "./components/PrivateDoctor.jsx";
+import PrivateWelcome from "./components/PrivateWelcome.jsx";
 
 function App() {
   return (
@@ -21,15 +22,17 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Navigate to="/welcome" replace />} />
-        <Route path="/welcome" element={<Welcome />} />
+        <Route element={<PrivateWelcome />}>
+          <Route path="/welcome" element={<Welcome />} />
+        </Route>
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/about" element={<About />} />
         <Route element={<PrivatePatient />}>
-          <Route path="/patient/:id" element={<PatientDashboard />} />
+          <Route path="/patient/" element={<PatientDashboard />} />
         </Route>
         <Route element={<PrivateDoctor />}>
-          <Route path="/doctor/:id" element={<DoctorDashboard />} />
+          <Route path="/doctor/" element={<DoctorDashboard />} />
         </Route>
         <Route path="/blog" element={<Blog />} />
         <Route path="/contact" element={<Contact />} />

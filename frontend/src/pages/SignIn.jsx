@@ -2,7 +2,6 @@ import axios from "axios";
 import bcryptjs from "bcryptjs";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import OAuth from "../components/OAuth";
 import { useDispatch, useSelector } from "react-redux";
 import {
   signInStart,
@@ -41,15 +40,12 @@ const SignIn = () => {
       );
       console.log(response.data);
 
-      let hid = bcryptjs.hashSync(response.data.email, 10);
-      hid = hid.replace(/\W/g, "").slice(5);
-
       if (response.data.type === "P") {
         dispatch(signInSuccess(response));
-        navigate(`/patient/${hid}`);
+        navigate(`/patient/`);
       } else if (response.data.type === "D") {
         dispatch(signInSuccess(response));
-        navigate(`/doctor/${hid}`);
+        navigate(`/doctor/`);
       } else {
         dispatch(signInFailure("Invalid account type"));
         return;
@@ -69,7 +65,6 @@ const SignIn = () => {
           <h2 className="text-3xl font-semibold text-center text-gray-700 mb-14">
             Log In
           </h2>
-          <OAuth />
           <div className="mb-4 transform -translate-y-4">
             <label className="block mb-2 text-sm font-bold text-gray-700">
               Email:

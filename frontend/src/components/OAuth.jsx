@@ -1,6 +1,7 @@
 import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { app } from "../firebase";
 import axios from "axios";
+import bcryptjs from "bcryptjs";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -25,15 +26,25 @@ const OAuth = ({ selectedOption }) => {
       const res = await axios
         .post("/api/auth/google", {
           email: result.user.email,
+          name: result.user.displayName,
           type: selectedOption,
           profile_url: result.user.photoURL,
         })
         .then((response) => {
           console.log(response.data);
+          let hid = bcryptjs.hashSync(response.data.email, 10);
+          hid = hid.replace(/\W/g, "").slice(5);
           dispatch(signInSuccess(response));
-          navigate("/");
+          if (response.data.type === "P") {
+            navigate(`/patient/${hid}`);
+          } else if (response.data.type == "D") {
+            navigate(`/doctor/${hid}`);
+          } else {
+            dispatch(signInFailure("Invalid account type"));
+            return;
+          }
         });
-    } catch (error) {
+    } catch (err) {
       console.log("Could not sign in with Google", error);
       dispatch(signInFailure(error));
     }

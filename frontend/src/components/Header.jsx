@@ -24,7 +24,7 @@ const Header = () => {
           <ul className="flex space-x-5">
             <li>
               <Link to="/" className="hover:underline">
-                Home
+                Dashboard
               </Link>
             </li>
             <li>

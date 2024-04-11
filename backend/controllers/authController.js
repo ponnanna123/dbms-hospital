@@ -149,7 +149,7 @@ export const signin = async (req, res) => {
 
 export const google = async (req, res) => {
   try {
-    const { email, type, profile_url } = req.body;
+    const { email, name, type, profile_url } = req.body;
     const query = "SELECT * FROM accounts WHERE email = ?";
 
     db.query(query, [email], (error, data) => {
@@ -174,10 +174,12 @@ export const google = async (req, res) => {
           Math.random().toString(36).slice(-8) +
           Math.random().toString(36).slice(-8);
         const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
-
+        const username =
+          name.split(" ").join("").toLowerCase() +
+          Math.random().toString(10).slice(-4);
         db.query(
-          "INSERT INTO accounts (email, password, type, profile_url) VALUES (?, ?, ?, ?)",
-          [email, hashedPassword, type, profile_url],
+          "INSERT INTO accounts (email, username, password, type, profile_url) VALUES (?, ?, ?, ?, ?)",
+          [email, username, hashedPassword, type, profile_url],
           (insertError) => {
             if (insertError) {
               console.error(insertError);
