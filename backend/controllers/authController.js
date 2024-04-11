@@ -1,8 +1,9 @@
 import db from "../server.js";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { errorHandler } from "../utils/error.js";
 
-export const patientsignup = async (req, res) => {
+export const patientsignup = async (req, res, next) => {
   const {
     email,
     password,
@@ -15,11 +16,15 @@ export const patientsignup = async (req, res) => {
     type,
   } = req.body;
   const hashedPassword = bcryptjs.hashSync(password, 10);
+  const username =
+    first_name.toLowerCase() +
+    last_name.toLowerCase() +
+    Math.random().toString(10).slice(-4);
 
   const query1 =
     "INSERT INTO patients (first_name, last_name, date_of_birth, gender, address, phone_number, email) VALUES (?, ? ,?, ?, ?, ?, ?)";
   const query2 =
-    "INSERT INTO accounts (email, password, type) VALUES (?, ? ,?)";
+    "INSERT INTO accounts (username, email, password, type) VALUES (?, ?, ? ,?)";
 
   db.query(
     query1,
@@ -34,28 +39,26 @@ export const patientsignup = async (req, res) => {
     ],
     (error, data) => {
       if (error) {
-        console.error("Error inserting patient:", error);
-        return res.status(500).json({
-          error: "Internal Server Error",
-        });
+        next(errorHandler(510, "Error creating patient"));
       }
 
-      db.query(query2, [email, hashedPassword, type], (error, data) => {
-        if (error) {
-          console.error("Error creating account:", error);
-          return res.status(500).json({
-            error: "Internal Server Error",
+      db.query(
+        query2,
+        [username, email, hashedPassword, type],
+        (error, data) => {
+          if (error) {
+            next(errorHandler(520, "Error creating account"));
+          }
+          res.status(201).send({
+            message: "Patient account created successfully.",
           });
         }
-        res.status(201).send({
-          message: "Patient account created successfully.",
-        });
-      });
+      );
     }
   );
 };
 
-export const doctorsignup = async (req, res) => {
+export const doctorsignup = async (req, res, next) => {
   const {
     email,
     password,
@@ -68,11 +71,15 @@ export const doctorsignup = async (req, res) => {
     type,
   } = req.body;
   const hashedPassword = bcryptjs.hashSync(password, 10);
+  const username =
+    first_name.toLowerCase() +
+    last_name.toLowerCase() +
+    Math.random().toString(10).slice(-4);
 
   const query1 =
     "INSERT INTO doctors (first_name, last_name, specialization_id, department_id, gender, phone_number, email) VALUES (?, ?, ?, ?, ?, ?, ?)";
   const query2 =
-    "INSERT INTO accounts (email, password, type) VALUES (?, ? ,?)";
+    "INSERT INTO accounts (username, email, password, type) VALUES (?, ? ,?)";
 
   db.query(
     query1,
@@ -87,23 +94,21 @@ export const doctorsignup = async (req, res) => {
     ],
     (error, data) => {
       if (error) {
-        console.error("Error inserting patient:", error);
-        return res.status(500).json({
-          error: "Internal Server Error",
-        });
+        next(errorHandler(510, "Error creating doctor"));
       }
 
-      db.query(query2, [email, hashedPassword, type], (error, data) => {
-        if (error) {
-          console.error("Error creating account:", error);
-          return res.status(500).json({
-            error: "Internal Server Error",
+      db.query(
+        query2,
+        [username, email, hashedPassword, type],
+        (error, data) => {
+          if (error) {
+            next(errorHandler(520, "Error creating account"));
+          }
+          res.status(201).send({
+            message: "Doctor account created successfully.",
           });
         }
-        res.status(201).send({
-          message: "Doctor account created successfully.",
-        });
-      });
+      );
     }
   );
 };
@@ -115,24 +120,17 @@ export const signin = async (req, res) => {
 
   db.query(query, [email], (error, data) => {
     if (error) {
-      console.error("Error querying account:", error);
-      return res.status(500).json({
-        error: "Internal Server Error",
-      });
+      next(errorHandler(505, "Error fetching account"));
     }
 
     if (data.length === 0) {
-      return res.status(404).json({
-        error: "Account not found",
-      });
+      next(errorHandler(404, "Account not found"));
     }
 
     const account = data[0];
 
     if (!bcryptjs.compareSync(password, account.password)) {
-      return res.status(401).json({
-        error: "Invalid password",
-      });
+      next(errorHandler(401, "Invalid password"));
     }
 
     const token = jwt.sign({ id: account.account_id }, process.env.JWT_KEY);
@@ -154,8 +152,7 @@ export const google = async (req, res) => {
 
     db.query(query, [email], (error, data) => {
       if (error) {
-        console.error(error);
-        return res.status(500).send("An error occurred");
+        next(errorHandler(505, "Error fetching account"));
       }
 
       if (data.length) {
@@ -182,19 +179,13 @@ export const google = async (req, res) => {
           [email, username, hashedPassword, type, profile_url],
           (insertError) => {
             if (insertError) {
-              console.error(insertError);
-              return res
-                .status(500)
-                .send("An error occurred during account creation");
+              next(errorHandler(520, "Error inserting account"));
             }
             db.query(
               "SELECT LAST_INSERT_ID() as account_id",
               (lastIdError, result1) => {
                 if (lastIdError) {
-                  console.error(lastIdError);
-                  return res
-                    .status(500)
-                    .send("An error occurred fetching the new account ID");
+                  next(errorHandler(506, "Error fetching account id"));
                 }
 
                 const account_id = result1[0].account_id;
@@ -203,10 +194,7 @@ export const google = async (req, res) => {
                   [account_id],
                   (selectError, result2) => {
                     if (selectError) {
-                      console.error(selectError);
-                      return res
-                        .status(500)
-                        .send("An error occurred fetching the new account");
+                      next(errorHandler(505, "Error fetching account"));
                     }
 
                     const account = result2[0];
@@ -231,7 +219,16 @@ export const google = async (req, res) => {
       }
     });
   } catch (error) {
-    console.log(error);
-    res.status(500).send("An unexpected error occurred");
+    next(errorHandler(500, "Internal Server Error"));
+  }
+};
+
+export const signout = async (req, res) => {
+  try {
+    res.clearCookie("access_token").status(200).send({
+      message: "User has been logged out successfully.",
+    });
+  } catch (error) {
+    next(error);
   }
 };

@@ -1,9 +1,31 @@
+import axios from "axios";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  signOutStart,
+  signOutSuccess,
+  signOutFailure,
+} from "../redux/user/userSlice";
 
 const Profile = () => {
   const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.user);
+
+  const handleSignOut = async () => {
+    try {
+      dispatch(signOutStart());
+      const response = await axios.get("/api/auth/sign-out");
+      console.log(response.data);
+      if (response.data.success) {
+        dispatch(signOutFailure(response.data.message));
+      }
+      dispatch(signOutSuccess(response.data));
+    } catch (error) {
+      dispatch(signOutFailure(error));
+    }
+  };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-green-200">
       <div className="flex justify-center">
@@ -69,7 +91,12 @@ const Profile = () => {
           </div>
           <div className="flex justify-between  transform -translate-y-5">
             <span className="text-red-600 font-bold">Delete Account</span>
-            <span className="text-red-600 font-bold">Sign Out</span>
+            <span
+              onClick={handleSignOut}
+              className="text-red-600 font-bold cursor-pointer"
+            >
+              Sign Out
+            </span>
           </div>
         </form>
       </div>

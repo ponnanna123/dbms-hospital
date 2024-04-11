@@ -32,13 +32,11 @@ const OAuth = ({ selectedOption }) => {
         })
         .then((response) => {
           console.log(response.data);
-          let hid = bcryptjs.hashSync(response.data.email, 10);
-          hid = hid.replace(/\W/g, "").slice(5);
           dispatch(signInSuccess(response));
           if (response.data.type === "P") {
-            navigate(`/patient/${hid}`);
+            navigate(`/patient`);
           } else if (response.data.type == "D") {
-            navigate(`/doctor/${hid}`);
+            navigate(`/doctor`);
           } else {
             dispatch(signInFailure("Invalid account type"));
             return;

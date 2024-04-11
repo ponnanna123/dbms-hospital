@@ -11,3 +11,5 @@ export const homepage = (req, res) => {
     }
   });
 };
+
+export const updateUser = (req, res) => {};

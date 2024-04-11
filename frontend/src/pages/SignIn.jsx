@@ -42,10 +42,10 @@ const SignIn = () => {
 
       if (response.data.type === "P") {
         dispatch(signInSuccess(response));
-        navigate(`/patient/`);
+        navigate(`/patient`);
       } else if (response.data.type === "D") {
         dispatch(signInSuccess(response));
-        navigate(`/doctor/`);
+        navigate(`/doctor`);
       } else {
         dispatch(signInFailure("Invalid account type"));
         return;
