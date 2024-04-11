@@ -113,7 +113,7 @@ export const doctorsignup = async (req, res, next) => {
   );
 };
 
-export const signin = async (req, res) => {
+export const signin = async (req, res, next) => {
   const { email, password } = req.body;
 
   const query = "SELECT * FROM accounts WHERE email = ?";

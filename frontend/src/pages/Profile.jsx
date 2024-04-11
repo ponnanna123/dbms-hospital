@@ -1,16 +1,57 @@
 import axios from "axios";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytesResumable,
+} from "firebase/storage";
 import {
   signOutStart,
   signOutSuccess,
   signOutFailure,
 } from "../redux/user/userSlice";
+import { app } from "../firebase";
 
 const Profile = () => {
-  const [loading, setLoading] = useState(false);
+  const fileRef = useRef(null);
   const dispatch = useDispatch();
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser, loading, error } = useSelector((state) => state.user);
+  const [imageFile, setImageFile] = useState(undefined);
+  const [uploadPercent, setUploadPercent] = useState(0);
+  const [uploadError, setUploadError] = useState(false);
+  const [formData, setFormData] = useState({});
+
+  useEffect(() => {
+    if (imageFile) {
+      handleImageUpload(imageFile);
+    }
+  }, [imageFile]);
+
+  const handleImageUpload = async (imageFile) => {
+    const storage = getStorage(app);
+    const fileName = new Date().getTime() + "_" + imageFile.name;
+    const storageRef = ref(storage, fileName);
+    const uploadTask = uploadBytesResumable(storageRef, imageFile);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        setUploadPercent(Math.round(progress));
+      },
+      (error) => {
+        setUploadError(true);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          setFormData({ ...formData, profile_url: downloadURL });
+        });
+      }
+    );
+  };
 
   const handleSignOut = async () => {
     try {
@@ -36,11 +77,32 @@ const Profile = () => {
           <h2 className="text-3xl font-semibold text-center text-gray-700 mb-14">
             Profile
           </h2>
+          <input
+            onChange={(e) => setImageFile(e.target.files[0])}
+            type="file"
+            ref={fileRef}
+            hidden
+            accept="image/*"
+          />
           <img
             className="rounded-full h-24 w-24 object-cover cursor-pointer self-center mb-16 -mt-5"
-            src={currentUser.data.profile_url}
+            src={formData.profile_url || currentUser.data.profile_url}
             alt="profile img"
+            onClick={() => fileRef.current.click()}
           />
+          <p className="text-center transform -translate-y-10">
+            {uploadError ? (
+              <span className="text-red-600">
+                Image upload failed! (image must be less than 5mb)
+              </span>
+            ) : uploadPercent > 0 && uploadPercent < 100 ? (
+              <span>{`Uploading: ${uploadPercent}%`}</span>
+            ) : uploadPercent === 100 ? (
+              <span className="text-green-600">Image upload complete!</span>
+            ) : (
+              ""
+            )}
+          </p>
           <div className="mb-4 transform -translate-y-4">
             <label className="block mb-2 text-sm font-bold text-gray-700">
               Username:

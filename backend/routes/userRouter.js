@@ -1,9 +1,14 @@
 import express from "express";
-import { homepage, updateUser } from "../controllers/userController.js";
+import {
+  homepage,
+  updateUser,
+  deleteUser,
+} from "../controllers/userController.js";
 
 const router = express.Router();
 
 router.get("/patients", homepage);
 router.post("/update/:id", updateUser);
+router.delete("/delete/:id", deleteUser);
 
 export default router;
