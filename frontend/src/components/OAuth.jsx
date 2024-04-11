@@ -33,9 +33,9 @@ const OAuth = ({ selectedOption }) => {
           console.log(response.data);
           dispatch(signInSuccess(response));
           if (response.data.type === "P") {
-            navigate(`/patient`);
+            navigate(`/dashboard/patient`);
           } else if (response.data.type == "D") {
-            navigate(`/doctor`);
+            navigate(`/dashboard/doctor`);
           } else {
             dispatch(signInFailure("Invalid account type"));
             return;

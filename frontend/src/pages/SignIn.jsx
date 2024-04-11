@@ -41,17 +41,17 @@ const SignIn = () => {
       console.log(response.data);
 
       if (response.data.type === "P") {
-        dispatch(signInSuccess(response));
+        dispatch(signInSuccess(response.data.message));
         navigate(`/patient`);
       } else if (response.data.type === "D") {
-        dispatch(signInSuccess(response));
+        dispatch(signInSuccess(response.data.message));
         navigate(`/doctor`);
       } else {
         dispatch(signInFailure("Invalid account type"));
         return;
       }
     } catch (err) {
-      dispatch(signInFailure(err));
+      dispatch(signInFailure(err.message));
     }
   };
 

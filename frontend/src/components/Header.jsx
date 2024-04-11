@@ -48,7 +48,7 @@ const Header = () => {
               </Link>
             </li>
             <Link to="/profile">
-              {currentUser ? (
+              {currentUser && currentUser.data ? (
                 <img
                   className="rounded-full h-7 w-7 object-cover"
                   src={currentUser.data.profile_url}

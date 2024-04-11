@@ -11,6 +11,9 @@ import {
   signOutStart,
   signOutSuccess,
   signOutFailure,
+  updateUserStart,
+  updateUserSuccess,
+  updateUserFailure,
 } from "../redux/user/userSlice";
 import { app } from "../firebase";
 
@@ -67,18 +70,44 @@ const Profile = () => {
     }
   };
 
+  const handleChange = (e) => {
+    if (e.target.type === "file") {
+      setImageFile(e.target.files[0]);
+    } else {
+      setFormData({ ...formData, [e.target.name]: e.target.value });
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      dispatch(updateUserStart());
+      const response = await axios.post(
+        `/api/user/update/${currentUser.data.account_id}`,
+        formData
+      );
+      if (!response.data.success) {
+        dispatch(updateUserFailure(response.data.message));
+      }
+      dispatch(updateUserSuccess(response.data.message));
+      console.log(response.data);
+    } catch (err) {
+      dispatch(updateUserFailure(err.message));
+    }
+  };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-green-200">
       <div className="flex justify-center">
         <form
-          //   onSubmit={handleSubmit}
+          onSubmit={handleSubmit}
           className="p-10 bg-white rounded shadow-md w-96 mr-10 mt-5 flex flex-col"
         >
           <h2 className="text-3xl font-semibold text-center text-gray-700 mb-14">
             Profile
           </h2>
           <input
-            onChange={(e) => setImageFile(e.target.files[0])}
+            onChange={handleChange}
             type="file"
             ref={fileRef}
             hidden
@@ -86,7 +115,12 @@ const Profile = () => {
           />
           <img
             className="rounded-full h-24 w-24 object-cover cursor-pointer self-center mb-16 -mt-5"
-            src={formData.profile_url || currentUser.data.profile_url}
+            src={
+              formData.profile_url ||
+              (currentUser && currentUser.data
+                ? currentUser.data.profile_url
+                : "")
+            }
             alt="profile img"
             onClick={() => fileRef.current.click()}
           />
@@ -111,7 +145,10 @@ const Profile = () => {
               className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
               type="text"
               name="username"
-              //   onChange={handleChange}
+              defaultValue={
+                currentUser && currentUser.data ? currentUser.data.username : ""
+              }
+              onChange={handleChange}
             />
           </div>
           <div className="mb-4 transform -translate-y-4">
@@ -122,7 +159,10 @@ const Profile = () => {
               className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
               type="email"
               name="email"
-              //   onChange={handleChange}
+              defaultValue={
+                currentUser && currentUser.data ? currentUser.data.email : ""
+              }
+              onChange={handleChange}
             />
           </div>
           <div className="mb-4 transform -translate-y-4">
@@ -133,7 +173,7 @@ const Profile = () => {
               className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
               type="password"
               name="password"
-              //   onChange={handleChange}
+              onChange={handleChange}
             />
             <div className="mb-6 mt-8 text-center">
               <button
