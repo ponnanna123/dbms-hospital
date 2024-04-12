@@ -64,9 +64,9 @@ const Profile = () => {
       if (response.data.success) {
         dispatch(signOutFailure(response.data.message));
       }
-      dispatch(signOutSuccess(response.data));
+      dispatch(signOutSuccess(response));
     } catch (error) {
-      dispatch(signOutFailure(error));
+      dispatch(signOutFailure(error.message));
     }
   };
 
@@ -80,20 +80,20 @@ const Profile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      dispatch(updateUserStart());
-      const response = await axios.post(
-        `/api/user/update/${currentUser.data.account_id}`,
-        formData
-      );
-      if (!response.data.success) {
-        dispatch(updateUserFailure(response.data.message));
-      }
-      dispatch(updateUserSuccess(response.data.message));
-      console.log(response.data);
-    } catch (err) {
-      dispatch(updateUserFailure(err.message));
-    }
+    dispatch(updateUserStart());
+    await axios
+      .post(`/api/user/update/${currentUser.data.account_id}`, formData)
+      .then((response) => {
+        console.log(response.data);
+        if (!response.data.success) {
+          // return dispatch(updateUserFailure(response.data.message));
+        }
+        dispatch(updateUserSuccess(response));
+        console.log(response.data);
+      })
+      .catch((err) => {
+        dispatch(updateUserFailure(err.message));
+      });
   };
 
   return (

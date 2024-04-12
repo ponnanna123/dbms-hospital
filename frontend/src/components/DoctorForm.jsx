@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import OAuth from "./OAuth";
@@ -18,9 +18,47 @@ const DoctorForm = ({ selectedOption }) => {
     phone_number: "",
     specialization_id: "",
     department_id: "",
+    hospital_id: "",
     type: "D",
   });
+  const [specializations, setSpecializations] = useState([]);
+  const [departments, setDepartments] = useState([]);
+  const [hospitals, setHospitals] = useState([]);
+
   const { loading, error } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    const fetchSpecializations = async () => {
+      try {
+        const response = await axios.get("/api/info/specializations");
+        setSpecializations(response.data.specializations);
+      } catch (error) {
+        console.log("Failed to fetch specializations", error);
+      }
+    };
+
+    const fetchDepartments = async () => {
+      try {
+        const response = await axios.get("/api/info/departments");
+        setDepartments(response.data.departments);
+      } catch (error) {
+        console.log("Failed to fetch departments", error);
+      }
+    };
+
+    const fetchHospitals = async () => {
+      try {
+        const response = await axios.get("/api/info/hospitals");
+        setHospitals(response.data.hospitals);
+      } catch (error) {
+        console.log("Failed to fetch hospitals", error);
+      }
+    };
+
+    fetchSpecializations();
+    fetchDepartments();
+    fetchHospitals();
+  }, []);
 
   const formRef = useRef();
   const navigate = useNavigate();
@@ -157,6 +195,23 @@ const DoctorForm = ({ selectedOption }) => {
           </div>
           <div className="mb-4">
             <label className="block mb-2 text-sm font-bold text-gray-700">
+              Hospital:
+            </label>
+            <select
+              className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+              name="hospital_id"
+              onChange={handleChange}
+            >
+              <option value="">Select Hospital</option>
+              {hospitals.map((hospital) => (
+                <option key={hospital.hospital_id} value={hospital.hospital_id}>
+                  {hospital.hospital_name}, {hospital.hospital_location}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="mb-4">
+            <label className="block mb-2 text-sm font-bold text-gray-700">
               Specialization:
             </label>
             <select
@@ -165,11 +220,14 @@ const DoctorForm = ({ selectedOption }) => {
               onChange={handleChange}
             >
               <option value="">Select Specialization</option>
-              <option value="1">General Physician</option>
-              <option value="2">Cardiologist</option>
-              <option value="3">Dermatologist</option>
-              <option value="4">Orthopedic Surgeon</option>
-              <option value="5">Pediatrician</option>
+              {specializations.map((specialization) => (
+                <option
+                  key={specialization.specialization_id}
+                  value={specialization.specialization_id}
+                >
+                  {specialization.specialization_name}
+                </option>
+              ))}
             </select>
           </div>
           <div className="mb-4">
@@ -182,16 +240,14 @@ const DoctorForm = ({ selectedOption }) => {
               onChange={handleChange}
             >
               <option value="">Select Department</option>
-              <option value="1">Emergency</option>
-              <option value="2">Pediatrics</option>
-              <option value="3">Radiology</option>
-              <option value="4">Cardiology</option>
-              <option value="5">Neurology</option>
-              <option value="6">Oncology</option>
-              <option value="7">Ophthalmology</option>
-              <option value="8">Orthopaedics</option>
-              <option value="9">Gynecology</option>
-              <option value="10">Pharmacy</option>
+              {departments.map((department) => (
+                <option
+                  key={department.department_id}
+                  value={department.department_id}
+                >
+                  {department.department_name}
+                </option>
+              ))}
             </select>
           </div>
           <div className="mb-6 mt-8 text-center">

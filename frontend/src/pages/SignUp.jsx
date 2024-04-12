@@ -1,7 +1,6 @@
 import { useState } from "react";
 import PatientForm from "../components/PatientForm";
 import DoctorForm from "../components/DoctorForm";
-import OAuth from "../components/OAuth";
 
 const SignUp = () => {
   const [selectedOption, setSelectedOption] = useState("P");

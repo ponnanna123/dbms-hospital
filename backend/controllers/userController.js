@@ -45,9 +45,7 @@ export const updateUser = async (req, res, next) => {
         } catch (error) {
           next(error);
         }
-        res.status(200).send({
-          message: "User updated successfully",
-        });
+        res.status(200).send(updatedUser.values);
       }
     );
     console.log(updatedUser.values);

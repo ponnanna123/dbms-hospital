@@ -4,6 +4,8 @@ import cors from "cors";
 import mysql from "mysql2";
 import authRouter from "./routes/authRouter.js";
 import userRouter from "./routes/userRouter.js";
+import infoRouter from "./routes/infoRouter.js";
+import appointmentRouter from "./routes/appointmentRouter.js";
 import cookieParser from "cookie-parser";
 
 dotenv.config();
@@ -44,6 +46,8 @@ app.listen(process.env.PORT, () => {
 
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/info", infoRouter);
+app.use("/api/appointments", appointmentRouter);
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
