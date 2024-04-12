@@ -1,4 +1,9 @@
-import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
+import {
+  GoogleAuthProvider,
+  getAuth,
+  signInWithPopup,
+  // getAdditionalUserInfo,
+} from "firebase/auth";
 import { app } from "../firebase";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -19,9 +24,26 @@ const OAuth = ({ selectedOption }) => {
     try {
       dispatch(signInStart());
       const provider = new GoogleAuthProvider();
+
       const auth = getAuth(app);
       const result = await signInWithPopup(auth, provider);
-      console.log(result);
+
+      // provider.addScope("https://www.googleapis.com/auth/userinfo.email");
+      // provider.addScope("https://www.googleapis.com/auth/userinfo.profile");
+      // provider.addScope("https://www.googleapis.com/auth/user.birthday.read");
+      // provider.addScope(
+      //   "https://www.googleapis.com/auth/user.phonenumbers.read"
+      // );
+      // provider.addScope("https://www.googleapis.com/auth/user.gender.read");
+      // provider.addScope("https://www.googleapis.com/auth/user.addresses.read");
+
+      // console.log(result.additionalUserInfo);
+
+      // if (result.additionalUserInfo) {
+      //   const profile = result.additionalUserInfo.profile;
+      //   console.log(profile);
+      // }
+
       const res = await axios
         .post("/api/auth/google", {
           email: result.user.email,
