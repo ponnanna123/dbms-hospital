@@ -39,7 +39,7 @@ export const patientsignup = async (req, res, next) => {
     ],
     (error, data) => {
       if (error) {
-        next(errorHandler(510, "Error creating patient"));
+        return next(errorHandler(510, "Error creating patient"));
       }
 
       db.query(
@@ -47,7 +47,7 @@ export const patientsignup = async (req, res, next) => {
         [username, email, hashedPassword, type],
         (error, data) => {
           if (error) {
-            next(errorHandler(520, "Error creating account"));
+            return next(errorHandler(520, "Error creating account"));
           }
           res.status(201).send({
             message: "Patient account created successfully.",
@@ -96,7 +96,7 @@ export const doctorsignup = async (req, res, next) => {
     ],
     (error, data) => {
       if (error) {
-        next(errorHandler(510, "Error creating doctor"));
+        return next(errorHandler(510, "Error creating doctor"));
       }
 
       db.query(
@@ -104,7 +104,7 @@ export const doctorsignup = async (req, res, next) => {
         [username, email, hashedPassword, type],
         (error, data) => {
           if (error) {
-            next(errorHandler(520, "Error creating account"));
+            return next(errorHandler(520, "Error creating account"));
           }
           res.status(201).send({
             message: "Doctor account created successfully.",
@@ -122,17 +122,17 @@ export const signin = async (req, res, next) => {
 
   db.query(query, [email], (error, data) => {
     if (error) {
-      next(errorHandler(505, "Error fetching account"));
+      return next(errorHandler(505, "Error fetching account"));
     }
 
     if (data.length === 0) {
-      next(errorHandler(404, "Account not found"));
+      return next(errorHandler(404, "Account not found"));
     }
 
     const account = data[0];
 
     if (!bcryptjs.compareSync(password, account.password)) {
-      next(errorHandler(401, "Invalid password"));
+      return next(errorHandler(401, "Invalid password"));
     }
 
     const token = jwt.sign({ id: account.account_id }, process.env.JWT_KEY);
@@ -154,7 +154,7 @@ export const google = async (req, res) => {
 
     db.query(query, [email], (error, data) => {
       if (error) {
-        next(errorHandler(505, "Error fetching account"));
+        return next(errorHandler(505, "Error fetching account"));
       }
 
       if (data.length) {
@@ -181,7 +181,7 @@ export const google = async (req, res) => {
           [email, username, hashedPassword, type, profile_url],
           (insertError) => {
             if (insertError) {
-              next(errorHandler(520, "Error inserting account"));
+              return next(errorHandler(520, "Error inserting account"));
             }
             db.query(
               "SELECT LAST_INSERT_ID() as account_id",
@@ -196,7 +196,7 @@ export const google = async (req, res) => {
                   [account_id],
                   (selectError, result2) => {
                     if (selectError) {
-                      next(errorHandler(505, "Error fetching account"));
+                      return next(errorHandler(505, "Error fetching account"));
                     }
 
                     const account = result2[0];
@@ -221,7 +221,7 @@ export const google = async (req, res) => {
       }
     });
   } catch (error) {
-    next(errorHandler(500, "Internal Server Error"));
+    return next(errorHandler(500, "Internal Server Error"));
   }
 };
 
@@ -231,6 +231,6 @@ export const signout = async (req, res) => {
       message: "User has been logged out successfully.",
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
