@@ -1,5 +1,4 @@
 import axios from "axios";
-import bcryptjs from "bcryptjs";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,7 +19,6 @@ const SignIn = () => {
   const dispatch = useDispatch();
 
   const handleChange = (e) => {
-    console.log({ [e.target.name]: e.target.value });
     setAccount({
       ...account,
       [e.target.name]: e.target.value,
@@ -34,22 +32,23 @@ const SignIn = () => {
     axios.defaults.xsrfCookieName = "csrftoken";
     try {
       dispatch(signInStart());
-      const response = await axios.post(
-        "http://localhost:5000/api/auth/sign-in",
-        account
-      );
-      console.log(response.data);
-
-      if (response.data.type === "P") {
-        dispatch(signInSuccess(response.data.message));
-        navigate(`/patient`);
-      } else if (response.data.type === "D") {
-        dispatch(signInSuccess(response.data.message));
-        navigate(`/doctor`);
-      } else {
-        dispatch(signInFailure("Invalid account type"));
-        return;
-      }
+      await axios
+        .post("/api/auth/sign-in", account)
+        .then((response) => {
+          if (response.data.type === "P") {
+            dispatch(signInSuccess(response));
+            navigate("/dashboard/patient");
+          } else if (response.data.type === "D") {
+            dispatch(signInSuccess(response));
+            navigate("/dashboard/doctor");
+          } else {
+            dispatch(signInFailure("Invalid account type"));
+            return;
+          }
+        })
+        .catch((err) => {
+          dispatch(signInFailure(err.message));
+        });
     } catch (err) {
       dispatch(signInFailure(err.message));
     }

@@ -79,7 +79,7 @@ export const doctorsignup = async (req, res, next) => {
   const query1 =
     "INSERT INTO doctors (first_name, last_name, specialization_id, department_id, gender, phone_number, email) VALUES (?, ?, ?, ?, ?, ?, ?)";
   const query2 =
-    "INSERT INTO accounts (username, email, password, type) VALUES (?, ? ,?)";
+    "INSERT INTO accounts (username, email, password, type) VALUES (?, ?, ? ,?)";
 
   db.query(
     query1,

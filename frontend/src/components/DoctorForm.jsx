@@ -27,7 +27,6 @@ const DoctorForm = ({ selectedOption }) => {
   const dispatch = useDispatch();
 
   const handleChange = (e) => {
-    console.log({ [e.target.name]: e.target.value });
     setDoctorDetails({
       ...doctorDetails,
       [e.target.name]: e.target.value,
