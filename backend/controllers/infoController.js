@@ -50,3 +50,22 @@ export const fetchHospitals = async (req, res, next) => {
     next(error);
   }
 };
+
+export const fetchDoctorsByHospital = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    console.log(id);
+    const query = "SELECT * FROM doctors WHERE hospital_id = ?";
+    db.query(query, [id], (err, result) => {
+      if (err) {
+        return next(err);
+      }
+      return res.status(200).json({
+        success: true,
+        doctors: result,
+      });
+    });
+  } catch (error) {
+    next(error);
+  }
+};
