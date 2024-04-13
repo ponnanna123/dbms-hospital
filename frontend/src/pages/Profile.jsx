@@ -65,7 +65,7 @@ const Profile = () => {
         dispatch(signOutFailure(response.data.message));
       }
       dispatch(signOutSuccess(response));
-    } catch (error) {
+    } catch (err) {
       dispatch(signOutFailure(error.message));
     }
   };
@@ -84,12 +84,10 @@ const Profile = () => {
     await axios
       .post(`/api/user/update/${currentUser.data.account_id}`, formData)
       .then((response) => {
-        console.log(response.data);
         if (!response.data.success) {
           // return dispatch(updateUserFailure(response.data.message));
         }
         dispatch(updateUserSuccess(response));
-        console.log(response.data);
       })
       .catch((err) => {
         dispatch(updateUserFailure(err.message));

@@ -102,6 +102,7 @@ const DoctorForm = ({ selectedOption }) => {
                 type="text"
                 name="first_name"
                 onChange={handleChange}
+                required
               />
             </div>
             <div className="w-1/2 pl-2">
@@ -113,6 +114,7 @@ const DoctorForm = ({ selectedOption }) => {
                 type="text"
                 name="last_name"
                 onChange={handleChange}
+                required
               />
             </div>
           </div>
@@ -125,6 +127,7 @@ const DoctorForm = ({ selectedOption }) => {
               type="email"
               name="email"
               onChange={handleChange}
+              required
             />
           </div>
           <div className="mb-4">
@@ -136,6 +139,7 @@ const DoctorForm = ({ selectedOption }) => {
               type="password"
               name="password"
               onChange={handleChange}
+              required
             />
           </div>
           <div className="mb-4">
@@ -149,6 +153,7 @@ const DoctorForm = ({ selectedOption }) => {
               pattern="[0-9]{10}"
               maxLength="10"
               onChange={handleChange}
+              required
             />
           </div>
           <div className="mb-4">
@@ -163,6 +168,7 @@ const DoctorForm = ({ selectedOption }) => {
                   name="gender"
                   value="M"
                   onChange={handleChange}
+                  required
                 />
                 Male
               </label>
@@ -196,6 +202,7 @@ const DoctorForm = ({ selectedOption }) => {
               className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
               name="hospital_id"
               onChange={handleChange}
+              required
             >
               <option value="">Select Hospital</option>
               {hospitals.map((hospital) => (
@@ -213,6 +220,7 @@ const DoctorForm = ({ selectedOption }) => {
               className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
               name="specialization_id"
               onChange={handleChange}
+              required
             >
               <option value="">Select Specialization</option>
               {specializations.map((specialization) => (
@@ -233,6 +241,7 @@ const DoctorForm = ({ selectedOption }) => {
               className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
               name="department_id"
               onChange={handleChange}
+              required
             >
               <option value="">Select Department</option>
               {departments.map((department) => (
