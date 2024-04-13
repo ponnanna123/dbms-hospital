@@ -52,7 +52,6 @@ const OAuth = ({ selectedOption }) => {
           profile_url: result.user.photoURL,
         })
         .then((response) => {
-          console.log(response.data);
           dispatch(signInSuccess(response));
           if (response.data.type === "P") {
             navigate(`/dashboard/patient`);

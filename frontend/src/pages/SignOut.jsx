@@ -37,7 +37,7 @@ const SignOut = () => {
           className="p-10 bg-white rounded shadow-md w-144 mr-10 mt-5"
         >
           <h2 className="text-2xl font-semibold text-center text-gray-700 mb-14">
-            Are you sure you want to Log Out?
+            Are you sure you want to Sign Out?
           </h2>
           <div className="mb-6 mt-8 text-center text-xl">
             <button

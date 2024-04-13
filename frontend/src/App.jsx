@@ -32,6 +32,7 @@ function App() {
         <Route path="/sign-out" element={<SignOut />} />
         <Route path="/about" element={<About />} />
         <Route path="/new-appointment" element={<CreateAppointment />} />
+        <Route path="/appointments" element={<CreateAppointment />} />
         <Route element={<PrivatePatient />}>
           <Route path="/dashboard/patient" element={<PatientDashboard />} />
         </Route>

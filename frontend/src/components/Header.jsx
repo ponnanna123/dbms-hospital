@@ -10,10 +10,6 @@ const Header = () => {
     setDropdown(!dropdown);
   };
 
-  const handleDropdown = () => {
-    setDropdown(!dropdown);
-  };
-
   return (
     <header className="bg-green-600 text-white py-5 px-10 fixed w-full z-50 shadow-md">
       <div className="container mx-auto flex justify-between items-center">
@@ -68,19 +64,27 @@ const Header = () => {
                     />
                   </Link>
                   {dropdown && (
-                    <ul className="absolute left-0 mt-2 bg-green-300 text-black rounded py-2 w-48 border border-black transition transform origin-top-right ease-out duration-200">
-                      <Link to="/new-appointment" onClick={handleDropdown}>
-                        <li className="px-4 py-2 hover:bg-green-400">
-                          New Appointment
-                        </li>
-                      </Link>
-                      <Link to="/profile" onClick={handleDropdown}>
-                        <li className="px-4 py-2 hover:bg-green-400">
+                    <ul className="absolute right-0 mt-2 bg-green-300 text-black rounded py-2 w-44 border border-black transition transform origin-top-right ease-out duration-200">
+                      {currentUser.data.type === "P" ? (
+                        <Link to="/new-appointment" onClick={toggleDropdown}>
+                          <li className="px-3 py-1 hover:bg-green-400">
+                            New Appointment
+                          </li>
+                        </Link>
+                      ) : (
+                        <Link to="/appointments" onClick={toggleDropdown}>
+                          <li className="px-3 py-1 hover:bg-green-400">
+                            Appointments
+                          </li>
+                        </Link>
+                      )}
+                      <Link to="/profile" onClick={toggleDropdown}>
+                        <li className="px-3 py-1 hover:bg-green-400">
                           Profile
                         </li>
                       </Link>
-                      <Link to="/sign-out" onClick={handleDropdown}>
-                        <li className="px-4 py-2 hover:bg-green-400">
+                      <Link to="/sign-out" onClick={toggleDropdown}>
+                        <li className="px-3 py-1 hover:bg-green-400">
                           Sign Out
                         </li>
                       </Link>
