@@ -15,6 +15,8 @@ import PrivateProfile from "./components/PrivateProfile.jsx";
 import PrivatePatient from "./components/PrivatePatient.jsx";
 import PrivateDoctor from "./components/PrivateDoctor.jsx";
 import PrivateWelcome from "./components/PrivateWelcome.jsx";
+import CreateAppointment from "./pages/CreateAppointment.jsx";
+import SignOut from "./pages/SignOut.jsx";
 
 function App() {
   return (
@@ -27,7 +29,9 @@ function App() {
         </Route>
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/sign-in" element={<SignIn />} />
+        <Route path="/sign-out" element={<SignOut />} />
         <Route path="/about" element={<About />} />
+        <Route path="/new-appointment" element={<CreateAppointment />} />
         <Route element={<PrivatePatient />}>
           <Route path="/dashboard/patient" element={<PatientDashboard />} />
         </Route>

@@ -47,10 +47,10 @@ const SignIn = () => {
           }
         })
         .catch((err) => {
-          dispatch(signInFailure(err.message));
+          dispatch(signInFailure(error.message));
         });
     } catch (err) {
-      dispatch(signInFailure(err.message));
+      dispatch(signInFailure(error.message));
     }
   };
 
@@ -85,33 +85,33 @@ const SignIn = () => {
               name="password"
               onChange={handleChange}
             />
-            <div className="mb-6 mt-8 text-center">
-              <button
-                className={`w-full px-4 py-2 font-bold text-white rounded-full focus:outline-none focus:shadow-outline 
+          </div>
+          <div className="mb-6 mt-8 text-center">
+            <button
+              className={`w-full px-4 py-2 font-bold text-white rounded-full focus:outline-none focus:shadow-outline 
                   ${
                     loading
                       ? "bg-green-300 cursor-not-allowed"
                       : "bg-green-500 hover:bg-green-700"
                   }`}
-                type="submit"
-                disabled={loading}
-              >
-                {loading ? "Loading..." : "Log In"}
-              </button>
-            </div>
-            <div className="flex justify-center">
-              <p>
-                Don't have an account?{" "}
-                <span className="text-blue-600">
-                  <Link to={"/sign-up"}>click here</Link>
-                </span>
-              </p>
-            </div>
-            <div className="text-center">
-              <p style={{ color: "red" }}>
-                {error && "Invalid email or password"}
-              </p>
-            </div>
+              type="submit"
+              disabled={loading}
+            >
+              {loading ? "Loading..." : "Log In"}
+            </button>
+          </div>
+          <div className="flex justify-center">
+            <p>
+              Don't have an account?{" "}
+              <span className="text-blue-600">
+                <Link to={"/sign-up"}>click here</Link>
+              </span>
+            </p>
+          </div>
+          <div className="text-center">
+            <p style={{ color: "red" }}>
+              {error && "Invalid email or password"}
+            </p>
           </div>
         </form>
       </div>

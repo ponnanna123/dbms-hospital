@@ -1,8 +1,18 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const Header = () => {
+  const [dropdown, setDropdown] = useState(false);
   const { currentUser } = useSelector((state) => state.user);
+
+  const toggleDropdown = () => {
+    setDropdown(!dropdown);
+  };
+
+  const handleDropdown = () => {
+    setDropdown(!dropdown);
+  };
 
   return (
     <header className="bg-green-600 text-white py-5 px-10 fixed w-full z-50 shadow-md">
@@ -47,17 +57,42 @@ const Header = () => {
                 About
               </Link>
             </li>
-            <Link to="/profile">
+            <li className="relative">
               {currentUser && currentUser.data ? (
-                <img
-                  className="rounded-full h-7 w-7 object-cover"
-                  src={currentUser.data.profile_url}
-                  alt="profile img"
-                />
+                <>
+                  <Link onClick={toggleDropdown}>
+                    <img
+                      className="rounded-full h-7 w-7 object-cover"
+                      src={currentUser.data.profile_url}
+                      alt="profile img"
+                    />
+                  </Link>
+                  {dropdown && (
+                    <ul className="absolute left-0 mt-2 bg-green-300 text-black rounded py-2 w-48 border border-black transition transform origin-top-right ease-out duration-200">
+                      <Link to="/new-appointment" onClick={handleDropdown}>
+                        <li className="px-4 py-2 hover:bg-green-400">
+                          New Appointment
+                        </li>
+                      </Link>
+                      <Link to="/profile" onClick={handleDropdown}>
+                        <li className="px-4 py-2 hover:bg-green-400">
+                          Profile
+                        </li>
+                      </Link>
+                      <Link to="/sign-out" onClick={handleDropdown}>
+                        <li className="px-4 py-2 hover:bg-green-400">
+                          Sign Out
+                        </li>
+                      </Link>
+                    </ul>
+                  )}
+                </>
               ) : (
-                <li className="hover:underline">Log In</li>
+                <Link to="/sign-in" className="hover:underline">
+                  Log In
+                </Link>
               )}
-            </Link>
+            </li>
           </ul>
         </nav>
       </div>
