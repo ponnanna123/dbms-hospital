@@ -10,6 +10,7 @@ const Welcome = () => {
       className="bg-cover bg-center min-h-screen pt-20 flex items-center justify-center z-10"
       style={{
         backgroundImage: "url('../../images/homepage.png')",
+      
       }}
     >
       <div className="text-center p-10 bg-green-100 text-green-700 backdrop-filter backdrop-blur-lg bg-opacity-50 rounded-lg shadow-lg">
