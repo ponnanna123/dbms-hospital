@@ -54,7 +54,6 @@ export const fetchHospitals = async (req, res, next) => {
 export const fetchDoctorsByHospital = async (req, res, next) => {
   try {
     const { id } = req.params;
-    console.log(id);
     const query = "SELECT * FROM doctors WHERE hospital_id = ?";
     db.query(query, [id], (err, result) => {
       if (err) {

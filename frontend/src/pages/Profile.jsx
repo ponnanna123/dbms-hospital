@@ -16,6 +16,7 @@ import {
   updateUserFailure,
 } from "../redux/user/userSlice";
 import { app } from "../firebase";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const fileRef = useRef(null);
@@ -25,6 +26,8 @@ const Profile = () => {
   const [uploadPercent, setUploadPercent] = useState(0);
   const [uploadError, setUploadError] = useState(false);
   const [formData, setFormData] = useState({});
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (imageFile) {
@@ -61,10 +64,8 @@ const Profile = () => {
       dispatch(signOutStart());
       const response = await axios.get("/api/auth/sign-out");
       console.log(response.data);
-      if (response.data.success) {
-        dispatch(signOutFailure(response.data.message));
-      }
-      dispatch(signOutSuccess(response));
+      await dispatch(signOutSuccess(response));
+      navigate("/welcome");
     } catch (err) {
       dispatch(signOutFailure(error.message));
     }

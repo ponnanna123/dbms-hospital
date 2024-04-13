@@ -46,10 +46,10 @@ const SignIn = () => {
             return;
           }
         })
-        .catch((err) => {
+        .catch((error) => {
           dispatch(signInFailure(error.message));
         });
-    } catch (err) {
+    } catch (error) {
       dispatch(signInFailure(error.message));
     }
   };
