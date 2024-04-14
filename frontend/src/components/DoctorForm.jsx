@@ -10,27 +10,17 @@ const DoctorForm = ({ selectedOption }) => {
     first_name: "",
     last_name: "",
     phone_number: "",
-    specialization_id: "",
     department_id: "",
     hospital_id: "",
     type: "D",
   });
-  const [specializations, setSpecializations] = useState([]);
+
   const [departments, setDepartments] = useState([]);
   const [hospitals, setHospitals] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchSpecializations = async () => {
-      try {
-        const response = await axios.get("/api/info/specializations");
-        setSpecializations(response.data.specializations);
-      } catch (error) {
-        console.log("Failed to fetch specializations", error);
-      }
-    };
-
     const fetchDepartments = async () => {
       try {
         const response = await axios.get("/api/info/departments");
@@ -49,7 +39,6 @@ const DoctorForm = ({ selectedOption }) => {
       }
     };
 
-    fetchSpecializations();
     fetchDepartments();
     fetchHospitals();
   }, []);
@@ -208,27 +197,6 @@ const DoctorForm = ({ selectedOption }) => {
               {hospitals.map((hospital) => (
                 <option key={hospital.hospital_id} value={hospital.hospital_id}>
                   {hospital.hospital_name}, {hospital.hospital_location}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="mb-4">
-            <label className="block mb-2 text-sm font-bold text-gray-700">
-              Specialization:
-            </label>
-            <select
-              className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-              name="specialization_id"
-              onChange={handleChange}
-              required
-            >
-              <option value="">Select Specialization</option>
-              {specializations.map((specialization) => (
-                <option
-                  key={specialization.specialization_id}
-                  value={specialization.specialization_id}
-                >
-                  {specialization.specialization_name}
                 </option>
               ))}
             </select>

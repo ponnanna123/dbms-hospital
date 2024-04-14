@@ -65,7 +65,6 @@ export const doctorsignup = async (req, res, next) => {
     first_name,
     last_name,
     phone_number,
-    specialization_id,
     department_id,
     hospital_id,
     gender,
@@ -78,7 +77,7 @@ export const doctorsignup = async (req, res, next) => {
     Math.random().toString(10).slice(-4);
 
   const query1 =
-    "INSERT INTO doctors (first_name, last_name, specialization_id, department_id, hospital_id, gender, phone_number, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    "INSERT INTO doctors (first_name, last_name, department_id, hospital_id, gender, phone_number, email) VALUES (?, ?, ?, ?, ?, ?, ?)";
   const query2 =
     "INSERT INTO accounts (username, email, password, type) VALUES (?, ?, ? ,?)";
 
@@ -87,7 +86,6 @@ export const doctorsignup = async (req, res, next) => {
     [
       first_name,
       last_name,
-      specialization_id,
       department_id,
       hospital_id,
       gender,
@@ -141,6 +139,8 @@ export const signin = async (req, res, next) => {
       .cookie("access_token", token, {
         httpOnly: true,
         expires: new Date(Date.now() + 24 * 60 * 60 * 365),
+        sameSite: "None",
+        secure: true,
       })
       .status(200)
       .send(rest);
@@ -165,6 +165,8 @@ export const google = async (req, res) => {
           .cookie("access_token", token, {
             httpOnly: true,
             expires: new Date(Date.now() + 24 * 60 * 60 * 365),
+            sameSite: "None",
+            secure: true,
           })
           .status(200)
           .send(rest);
@@ -209,6 +211,8 @@ export const google = async (req, res) => {
                       .cookie("access_token", token, {
                         httpOnly: true,
                         expires: new Date(Date.now() + 24 * 60 * 60 * 365),
+                        sameSite: "None",
+                        secure: true,
                       })
                       .status(200)
                       .send(rest);

@@ -29,11 +29,6 @@ const Header = () => {
         <nav className="flex items-center space-x-5">
           <ul className="flex space-x-5">
             <li>
-              <Link to="/" className="hover:underline">
-                Dashboard
-              </Link>
-            </li>
-            <li>
               <Link to="/services" className="hover:underline">
                 Services
               </Link>

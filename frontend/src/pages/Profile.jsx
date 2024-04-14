@@ -14,6 +14,9 @@ import {
   updateUserStart,
   updateUserSuccess,
   updateUserFailure,
+  deleteUserStart,
+  deleteUserSuccess,
+  deleteUserFailure,
 } from "../redux/user/userSlice";
 import { app } from "../firebase";
 import { useNavigate } from "react-router-dom";
@@ -57,6 +60,20 @@ const Profile = () => {
         });
       }
     );
+  };
+
+  // TODO: Implement delete functionality
+  const handleDeleteAccount = async () => {
+    try {
+      dispatch(deleteUserStart());
+      const response = await axios.get(
+        `/api/user/delete/${currentUser.data.account_id}`
+      );
+      console.log(response.data);
+      await dispatch(deleteUserSuccess(response));
+    } catch (error) {
+      dispatch(deleteUserFailure(error.message));
+    }
   };
 
   const handleSignOut = async () => {
@@ -183,18 +200,17 @@ const Profile = () => {
                 {loading ? "Loading..." : "Update"}
               </button>
             </div>
-
-            {/* <div className="text-center">
-              <p style={{ color: "red" }}>
-                {error && "Invalid email or password"}
-              </p>
-            </div> */}
           </div>
           <div className="flex justify-between  transform -translate-y-5">
-            <span className="text-red-600 font-bold">Delete Account</span>
+            <span
+              onClick={handleDeleteAccount}
+              className="text-red-600 rounded-full px-3 py-1 font-bold cursor-pointer hover:text-white hover:bg-red-600"
+            >
+              Delete Account
+            </span>
             <span
               onClick={handleSignOut}
-              className="text-red-600 font-bold cursor-pointer"
+              className="text-red-600 rounded-full px-3 py-1 font-bold cursor-pointer hover:text-white hover:bg-red-600"
             >
               Sign Out
             </span>

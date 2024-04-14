@@ -1,22 +1,5 @@
 import db from "../server.js";
 
-export const fetchSpecializations = async (req, res, next) => {
-  try {
-    const query = "SELECT * FROM specializations";
-    db.query(query, (err, result) => {
-      if (err) {
-        return next(err);
-      }
-      return res.status(200).json({
-        success: true,
-        specializations: result,
-      });
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
 export const fetchDepartments = async (req, res, next) => {
   try {
     const query = "SELECT * FROM departments";
@@ -51,11 +34,12 @@ export const fetchHospitals = async (req, res, next) => {
   }
 };
 
-export const fetchDoctorsByHospital = async (req, res, next) => {
+export const fetchDoctors = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const query = "SELECT * FROM doctors WHERE hospital_id = ?";
-    db.query(query, [id], (err, result) => {
+    const { id1, id2 } = req.params;
+    const query =
+      "SELECT * FROM doctors WHERE hospital_id = ? AND department_id = ?";
+    db.query(query, [id1, id2], (err, result) => {
       if (err) {
         return next(err);
       }
