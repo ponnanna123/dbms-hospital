@@ -11,44 +11,44 @@ import Profile from "./pages/Profile.jsx";
 import Welcome from "./pages/Welcome.jsx";
 import PatientDashboard from "./pages/PatientDashboard.jsx";
 import DoctorDashboard from "./pages/DoctorDashboard.jsx";
-import PrivateProfile from "./components/PrivateProfile.jsx";
-import PrivatePatient from "./components/PrivatePatient.jsx";
-import PrivateDoctor from "./components/PrivateDoctor.jsx";
 import PrivateWelcome from "./components/PrivateWelcome.jsx";
 import CreateAppointment from "./pages/CreateAppointment.jsx";
 import SignOut from "./pages/SignOut.jsx";
 import PrivateSignInUp from "./components/PrivateSignInUp.jsx";
+import PrivateUser from "./components/PrivateUser.jsx";
+import PrivateDashboard from "./components/PrivateDashboard.jsx";
 
 function App() {
   return (
     <BrowserRouter>
       <Header />
       <Routes>
+        {/* Public Routes */}
+        <Route path="/about" element={<About />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/services" element={<Services />} />
+
+        {/* Redirecting from HomePage */}
         <Route path="/" element={<Navigate to="/welcome" replace />} />
+
+        {/* Private Routes */}
         <Route element={<PrivateWelcome />}>
           <Route path="/welcome" element={<Welcome />} />
         </Route>
         <Route element={<PrivateSignInUp />}>
           <Route path="/sign-up" element={<SignUp />} />
-        </Route>
-        <Route element={<PrivateSignInUp />}>
           <Route path="/sign-in" element={<SignIn />} />
         </Route>
-        <Route path="/sign-out" element={<SignOut />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/new-appointment" element={<CreateAppointment />} />
-        <Route path="/appointments" element={<CreateAppointment />} />
-        <Route element={<PrivatePatient />}>
+        <Route element={<PrivateDashboard />}>
           <Route path="/dashboard/patient" element={<PatientDashboard />} />
-        </Route>
-        <Route element={<PrivateDoctor />}>
           <Route path="/dashboard/doctor" element={<DoctorDashboard />} />
         </Route>
-        <Route path="/blog" element={<Blog />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/services" element={<Services />} />
-        <Route element={<PrivateProfile />}>
+        <Route element={<PrivateUser />}>
           <Route path="/profile" element={<Profile />} />
+          <Route path="/sign-out" element={<SignOut />} />
+          <Route path="/new-appointment" element={<CreateAppointment />} />
+          <Route path="/appointments" element={<CreateAppointment />} />
         </Route>
       </Routes>
       <Footer />

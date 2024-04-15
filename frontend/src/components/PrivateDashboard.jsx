@@ -1,9 +1,9 @@
 import { useSelector } from "react-redux";
 import { Outlet, Navigate } from "react-router-dom";
 
-const PrivateProfile = () => {
+const PrivateDashboard = () => {
   const { currentUser } = useSelector((state) => state.user);
-  return currentUser ? <Outlet /> : <Navigate to="/sign-in" />;
+  return currentUser ? <Outlet /> : <Navigate to="/welcome" />;
 };
 
-export default PrivateProfile;
+export default PrivateDashboard;
