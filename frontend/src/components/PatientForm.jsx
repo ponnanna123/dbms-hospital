@@ -13,10 +13,10 @@ const PatientForm = ({ selectedOption }) => {
     gender: "",
     address: "",
     phone_number: "",
-    type: "P",
+    type: selectedOption,
   });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(false);
 
   const formRef = useRef();
   const navigate = useNavigate();
@@ -28,23 +28,24 @@ const PatientForm = ({ selectedOption }) => {
     });
   };
 
-  const addPatient = (e) => {
+  const addPatient = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
-    axios
-      .post("/api/auth/sign-up/patient", patientDetails)
-      .then((response) => {
-        console.log(response.data);
-        setPatientDetails({});
-        formRef.current.reset();
-        setLoading(false);
-        setError(null);
-        navigate("/sign-in");
-      })
-      .catch((err) => {
-        setError(err.message);
-      });
+    setError(false);
+    try {
+      const response = await axios.post(
+        "/api/auth/sign-up/patient",
+        patientDetails
+      );
+      setPatientDetails({});
+      formRef.current.reset();
+      setLoading(false);
+      setError(false);
+      navigate("/sign-in");
+    } catch (error) {
+      setLoading(false);
+      setError(true);
+    }
   };
 
   return (

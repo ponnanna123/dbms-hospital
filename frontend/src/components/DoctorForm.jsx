@@ -12,13 +12,13 @@ const DoctorForm = ({ selectedOption }) => {
     phone_number: "",
     department_id: "",
     hospital_id: "",
-    type: "D",
+    type: selectedOption,
   });
 
   const [departments, setDepartments] = useState([]);
   const [hospitals, setHospitals] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     const fetchDepartments = async () => {
@@ -53,23 +53,24 @@ const DoctorForm = ({ selectedOption }) => {
     });
   };
 
-  const addDoctor = (e) => {
+  const addDoctor = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
-    axios
-      .post("/api/auth/sign-up/doctor", doctorDetails)
-      .then((response) => {
-        console.log(response.data);
-        setDoctorDetails({});
-        formRef.current.reset();
-        setLoading(false);
-        setError(null);
-        navigate("/sign-in");
-      })
-      .catch((err) => {
-        setError(err.message);
-      });
+    setError(false);
+    try {
+      const response = await axios.post(
+        "/api/auth/sign-up/doctor",
+        doctorDetails
+      );
+      setDoctorDetails({});
+      formRef.current.reset();
+      setLoading(false);
+      setError(null);
+      navigate("/sign-in");
+    } catch (error) {
+      setLoading(false);
+      setError(true);
+    }
   };
 
   return (

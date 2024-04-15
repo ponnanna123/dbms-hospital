@@ -15,6 +15,7 @@ export const patientsignup = async (req, res, next) => {
     phone_number,
     type,
   } = req.body;
+
   const hashedPassword = bcryptjs.hashSync(password, 10);
   const username =
     first_name.toLowerCase() +
@@ -22,40 +23,35 @@ export const patientsignup = async (req, res, next) => {
     Math.random().toString(10).slice(-4);
 
   const query1 =
-    "INSERT INTO patients (first_name, last_name, date_of_birth, gender, address, phone_number, email) VALUES (?, ? ,?, ?, ?, ?, ?)";
-  const query2 =
     "INSERT INTO accounts (username, email, password, type) VALUES (?, ?, ? ,?)";
+  const query2 =
+    "INSERT INTO patients (first_name, last_name, date_of_birth, gender, address, phone_number, email) VALUES (?, ? ,?, ?, ?, ?, ?)";
 
-  db.query(
-    query1,
-    [
-      first_name,
-      last_name,
-      date_of_birth,
-      gender,
-      address,
-      phone_number,
-      email,
-    ],
-    (error, data) => {
-      if (error) {
-        return next(errorHandler(510, "Error creating patient"));
-      }
-
-      db.query(
-        query2,
-        [username, email, hashedPassword, type],
-        (error, data) => {
-          if (error) {
-            return next(errorHandler(520, "Error creating account"));
-          }
-          res.status(201).send({
-            message: "Patient account created successfully.",
-          });
-        }
-      );
+  db.query(query1, [username, email, hashedPassword, type], (error, data) => {
+    if (error) {
+      return next(errorHandler(510, "Error creating account"));
     }
-  );
+    db.query(
+      query2,
+      [
+        first_name,
+        last_name,
+        date_of_birth,
+        gender,
+        address,
+        phone_number,
+        email,
+      ],
+      (error, data) => {
+        if (error) {
+          return next(errorHandler(520, "Error creating patient"));
+        }
+        res.status(201).send({
+          message: "Patient account created successfully.",
+        });
+      }
+    );
+  });
 };
 
 export const doctorsignup = async (req, res, next) => {
@@ -70,6 +66,7 @@ export const doctorsignup = async (req, res, next) => {
     gender,
     type,
   } = req.body;
+
   const hashedPassword = bcryptjs.hashSync(password, 10);
   const username =
     first_name.toLowerCase() +
@@ -77,40 +74,36 @@ export const doctorsignup = async (req, res, next) => {
     Math.random().toString(10).slice(-4);
 
   const query1 =
-    "INSERT INTO doctors (first_name, last_name, department_id, hospital_id, gender, phone_number, email) VALUES (?, ?, ?, ?, ?, ?, ?)";
-  const query2 =
     "INSERT INTO accounts (username, email, password, type) VALUES (?, ?, ? ,?)";
+  const query2 =
+    "INSERT INTO doctors (first_name, last_name, department_id, hospital_id, gender, phone_number, email) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-  db.query(
-    query1,
-    [
-      first_name,
-      last_name,
-      department_id,
-      hospital_id,
-      gender,
-      phone_number,
-      email,
-    ],
-    (error, data) => {
-      if (error) {
-        return next(errorHandler(510, "Error creating doctor"));
-      }
-
-      db.query(
-        query2,
-        [username, email, hashedPassword, type],
-        (error, data) => {
-          if (error) {
-            return next(errorHandler(520, "Error creating account"));
-          }
-          res.status(201).send({
-            message: "Doctor account created successfully.",
-          });
-        }
-      );
+  db.query(query1, [username, email, hashedPassword, type], (error, data) => {
+    if (error) {
+      return next(errorHandler(510, "Error creating account"));
     }
-  );
+
+    db.query(
+      query2,
+      [
+        first_name,
+        last_name,
+        department_id,
+        hospital_id,
+        gender,
+        phone_number,
+        email,
+      ],
+      (error, data) => {
+        if (error) {
+          return next(errorHandler(520, "Error creating doctor"));
+        }
+        res.status(201).send({
+          message: "Doctor account created successfully.",
+        });
+      }
+    );
+  });
 };
 
 export const signin = async (req, res, next) => {
