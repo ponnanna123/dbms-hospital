@@ -8,12 +8,12 @@ export const createAppointment = async (req, res, next) => {
       department_id,
       hospital_id,
       appointment_datetime,
-      status,
       duration,
       description,
     } = req.body;
 
     const { id } = req.params;
+    const status = "Scheduled";
 
     console.log(req.params);
     console.log(req.body);

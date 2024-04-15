@@ -1,14 +1,14 @@
 import { useState, useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const CreateAppointment = () => {
-  const [appointmentDetails, setAppointmentetails] = useState({
+  const [appointmentDetails, setAppointmentDetails] = useState({
     doctor_id: "",
     department_id: "",
     hospital_id: "",
     appointment_datetime: "",
-    status: "",
     duration: "",
     description: "",
   });
@@ -47,6 +47,7 @@ const CreateAppointment = () => {
   }, []);
 
   const formRef = useRef();
+  const navigate = useNavigate();
 
   const fetchDoctors = async (hospitalId, departmentId) => {
     if (hospitalId || departmentId) {
@@ -75,27 +76,26 @@ const CreateAppointment = () => {
       doctor_id: doctorId,
     };
 
-    axios
-      .post(
-        `/api/appointments/create/${currentUser.data.account_id}`,
-        appointmentData
-      )
-      .then((response) => {
-        console.log(response.data);
-        setAppointmentDetails({});
-        formRef.current.reset();
-        setLoading(false);
-        setError(false);
-        // navigate to a different page if needed
-      })
-      .catch((err) => {
-        setError(err.message);
-        setLoading(false);
-      });
+    const response = axios.post(
+      `/api/appointments/create/${currentUser.data.account_id}`,
+      appointmentData
+    );
+
+    try {
+      setAppointmentDetails({});
+      formRef.current.reset();
+      setLoading(false);
+      setError(false);
+      navigate("/dashboard/patient");
+    } catch (error) {
+      console.log(error.message);
+      setError(true);
+      setLoading(false);
+    }
   };
 
   const handleChange = (e) => {
-    setAppointmentetails({
+    setAppointmentDetails({
       ...appointmentDetails,
       [e.target.name]: e.target.value,
     });
@@ -122,6 +122,7 @@ const CreateAppointment = () => {
     <div className="flex flex-col items-center justify-center min-h-screen bg-green-200">
       <div className="flex justify-center">
         <form
+          ref={formRef}
           onSubmit={handleSubmit}
           className="p-10 bg-white rounded shadow-md w-96 mr-10 mt-16"
         >
@@ -190,6 +191,7 @@ const CreateAppointment = () => {
               Appointment Date and Time:
             </label>
             <input
+              className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
               name="appointment_datetime"
               type="datetime-local"
               onChange={handleChange}
@@ -198,21 +200,25 @@ const CreateAppointment = () => {
           </div>
           <div className="mb-4">
             <label className="block mb-2 text-sm font-bold text-gray-700">
-              Status:
-            </label>
-            <input name="status" onChange={handleChange} required />
-          </div>
-          <div className="mb-4">
-            <label className="block mb-2 text-sm font-bold text-gray-700">
               Duration:
             </label>
-            <input name="duration" onChange={handleChange} required />
+            <input
+              className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+              name="duration"
+              onChange={handleChange}
+              required
+            />
           </div>
           <div className="mb-4">
             <label className="block mb-2 text-sm font-bold text-gray-700">
               Description:
             </label>
-            <textarea name="description" onChange={handleChange} required />
+            <textarea
+              className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+              name="description"
+              onChange={handleChange}
+              required
+            />
           </div>
           <div className="mb-6 mt-8 text-center">
             <button
