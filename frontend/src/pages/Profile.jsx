@@ -102,9 +102,6 @@ const Profile = () => {
     await axios
       .post(`/api/user/update/${currentUser.data.account_id}`, formData)
       .then((response) => {
-        if (!response.data.success) {
-          // return dispatch(updateUserFailure(response.data.message));
-        }
         dispatch(updateUserSuccess(response));
       })
       .catch((err) => {

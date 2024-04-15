@@ -18,8 +18,9 @@ const CreateAppointment = () => {
   const [departments, setDepartments] = useState([]);
   const [departmentId, setDepartmentId] = useState(null);
   const [doctors, setDoctors] = useState([]);
+  const [doctorId, setDoctorId] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(false);
   const { currentUser } = useSelector((state) => state.user);
 
   useEffect(() => {
@@ -65,19 +66,26 @@ const CreateAppointment = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
+    setError(false);
+
+    const appointmentData = {
+      ...appointmentDetails,
+      hospital_id: hospitalId,
+      department_id: departmentId,
+      doctor_id: doctorId,
+    };
 
     axios
       .post(
         `/api/appointments/create/${currentUser.data.account_id}`,
-        appointmentDetails
+        appointmentData
       )
       .then((response) => {
         console.log(response.data);
         setAppointmentDetails({});
         formRef.current.reset();
         setLoading(false);
-        setError(null);
+        setError(false);
         // navigate to a different page if needed
       })
       .catch((err) => {
@@ -103,6 +111,11 @@ const CreateAppointment = () => {
     const newDepartmentId = e.target.value;
     setDepartmentId(newDepartmentId);
     fetchDoctors(hospitalId, newDepartmentId);
+  };
+
+  const handleChangeDoctor = (e) => {
+    const newDoctorId = e.target.value;
+    setDoctorId(newDoctorId);
   };
 
   return (
@@ -162,6 +175,7 @@ const CreateAppointment = () => {
               className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
               name="doctor_id"
               required
+              onChange={handleChangeDoctor}
             >
               <option value="">Select Doctor</option>
               {doctors.map((doctor) => (
@@ -214,11 +228,11 @@ const CreateAppointment = () => {
               {loading ? "Loading..." : "Book Appointment"}
             </button>
           </div>
-          <div className="text-center">
+          {/* <div className="text-center">
             <p style={{ color: "red" }}>
               {error && "An error occurred while creating the appointment"}
             </p>
-          </div>
+          </div> */}
         </form>
       </div>
     </div>

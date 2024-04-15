@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -13,7 +13,11 @@ const SignIn = () => {
     email: "",
     password: "",
   });
-  const { loading, error } = useSelector((state) => state.user);
+  const { currentUser, loading, error } = useSelector((state) => state.user);
+
+  // useEffect(() => {
+  //   if (currentUser.type)
+  // })
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -32,23 +36,18 @@ const SignIn = () => {
     axios.defaults.xsrfCookieName = "csrftoken";
     try {
       dispatch(signInStart());
-      await axios
-        .post("/api/auth/sign-in", account)
-        .then((response) => {
-          if (response.data.type === "P") {
-            dispatch(signInSuccess(response));
-            navigate("/dashboard/patient");
-          } else if (response.data.type === "D") {
-            dispatch(signInSuccess(response));
-            navigate("/dashboard/doctor");
-          } else {
-            dispatch(signInFailure("Invalid account type"));
-            return;
-          }
-        })
-        .catch((error) => {
-          dispatch(signInFailure(error.message));
-        });
+      const response = await axios.post("/api/auth/sign-in", account);
+      console.log(response.data.type);
+      if (response.data.type === "P") {
+        dispatch(signInSuccess(response));
+        navigate("/dashboard/patient");
+      } else if (response.data.type === "D") {
+        dispatch(signInSuccess(response));
+        navigate("/dashboard/doctor");
+      } else {
+        dispatch(signInFailure("Invalid account type"));
+      }
+      console.log(currentUser);
     } catch (error) {
       dispatch(signInFailure(error.message));
     }
