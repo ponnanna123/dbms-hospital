@@ -43,6 +43,7 @@ export const deleteUser = async (req, res, next) => {
 };
 
 export const updateUser = async (req, res, next) => {
+  const { id } = req.params;
   if (req.user.id != id) {
     return next(errorHandler(401, "You can only update your own account!"));
   }

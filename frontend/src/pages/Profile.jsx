@@ -99,14 +99,15 @@ const Profile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     dispatch(updateUserStart());
-    await axios
-      .post(`/api/user/update/${currentUser.data.account_id}`, formData)
-      .then((response) => {
-        dispatch(updateUserSuccess(response));
-      })
-      .catch((err) => {
-        dispatch(updateUserFailure(err.message));
-      });
+    const response = await axios.post(
+      `/api/user/update/${currentUser.data.account_id}`,
+      formData
+    );
+    try {
+      dispatch(updateUserSuccess(response));
+    } catch (error) {
+      dispatch(updateUserFailure(error.message));
+    }
   };
 
   return (
