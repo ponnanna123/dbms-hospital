@@ -15,12 +15,19 @@ const SignIn = () => {
   });
   const { currentUser, loading, error } = useSelector((state) => state.user);
 
-  // useEffect(() => {
-  //   if (currentUser.type)
-  // })
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log(currentUser);
+    if (!loading) {
+      if (currentUser && currentUser.type === "P") {
+        navigate("/dashboard/patient");
+      } else if (currentUser && currentUser.type === "D") {
+        navigate("/dashboard/doctor");
+      }
+    }
+  }, [currentUser, loading]);
 
   const handleChange = (e) => {
     setAccount({
@@ -37,17 +44,13 @@ const SignIn = () => {
     try {
       dispatch(signInStart());
       const response = await axios.post("/api/auth/sign-in", account);
-      console.log(response.data.type);
       if (response.data.type === "P") {
         dispatch(signInSuccess(response));
-        navigate("/dashboard/patient");
       } else if (response.data.type === "D") {
         dispatch(signInSuccess(response));
-        navigate("/dashboard/doctor");
       } else {
         dispatch(signInFailure("Invalid account type"));
       }
-      console.log(currentUser);
     } catch (error) {
       dispatch(signInFailure(error.message));
     }
@@ -102,8 +105,8 @@ const SignIn = () => {
           <div className="flex justify-center">
             <p>
               Don't have an account?{" "}
-              <span className="text-blue-600">
-                <Link to={"/sign-up"}>click here</Link>
+              <span className="text-green-700 font-semibold rounded-full px-2 py-0.5 hover:bg-green-600 hover:text-white">
+                <Link to={"/sign-up"}>register here</Link>
               </span>
             </p>
           </div>
