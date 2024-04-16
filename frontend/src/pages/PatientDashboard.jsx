@@ -35,7 +35,7 @@ const PatientDashboard = () => {
 
   return (
     <div className="flex flex-col items-center bg-green-200 pt-36 lg:pl-16 lg:pr-16 xl:pl-24 xl:pr-24 pl-12 pr-12">
-      <div className="flex justify-between w-full px-4 mb-8">
+      <div className="flex justify-between w-full px-4 mb-8 mt-4 transform -translate-y-10">
         <h3 className="text-4xl font-bold">List of appointments:</h3>
         <button
           onClick={() => navigate("/new-appointment")}
@@ -75,6 +75,10 @@ const PatientDashboard = () => {
                         {appointment.hospital_name}
                       </p>
                       <p className="text-gray-600">
+                        <span className="font-bold">Location:</span>{" "}
+                        {appointment.hospital_location}
+                      </p>
+                      <p className="text-gray-600">
                         <span className="font-bold">Date:</span> {date}
                       </p>
                       <p className="text-gray-600">
@@ -94,7 +98,7 @@ const PatientDashboard = () => {
           })}
         </div>
       ) : (
-        <h3 className="text-5xl font-bold text-center mb-96">
+        <h3 className="text-5xl font-bold text-center mt-80 mb-80">
           You have no appointments.
         </h3>
       )}

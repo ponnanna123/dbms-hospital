@@ -14,7 +14,7 @@ export const homepage = (req, res) => {
   });
 };
 
-export const deleteUser = async (req, res, next) => {
+export const deletePatient = async (req, res, next) => {
   const { id } = req.params;
   if (req.user.id != id) {
     return next(errorHandler(401, "You can only delete your own account!"));
@@ -22,21 +22,37 @@ export const deleteUser = async (req, res, next) => {
 
   try {
     const procedure = `
-      CREATE PROCEDURE IF NOT EXISTS delete_user_and_related_info(IN user_id INT)
-      BEGIN
-        DELETE FROM appointments WHERE patient_id = user_id;
-        DELETE FROM patients WHERE account_id = user_id;
-        DELETE FROM accounts WHERE account_id = user_id;
-      END
-    `;
-    await db.query(procedure);
+    CREATE PROCEDURE IF NOT EXISTS delete_user_and_related_info(IN user_id INT, IN user_email VARCHAR(45))
+    BEGIN
+      DELETE FROM appointments WHERE account_id = user_id;
+      DELETE FROM patients WHERE email = user_email;
+      DELETE FROM accounts WHERE account_id = user_id;
+    END
+  `;
 
-    const query = `CALL delete_user_and_related_info(?)`;
-    await db.query(query, [id]);
+    db.query(procedure, (err) => {
+      if (err) return next(err);
 
-    res
-      .status(200)
-      .json({ success: true, message: "User deleted successfully" });
+      db.query(
+        "SELECT email FROM accounts WHERE account_id = ?",
+        [id],
+        (err, user) => {
+          if (err) return next(errorHandler(400, "Invalid data"));
+          const userEmail = user[0].email;
+
+          db.query(
+            "CALL delete_user_and_related_info(?, ?)",
+            [id, userEmail],
+            (err) => {
+              if (err) return next(err);
+              res
+                .status(200)
+                .json({ success: true, message: "User deleted successfully" });
+            }
+          );
+        }
+      );
+    });
   } catch (error) {
     next(error);
   }

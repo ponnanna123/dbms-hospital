@@ -62,15 +62,17 @@ const Profile = () => {
     );
   };
 
-  // TODO: Implement delete functionality
   const handleDeleteAccount = async () => {
     try {
       dispatch(deleteUserStart());
-      const response = await axios.get(
+      const response1 = await axios.get("/api/auth/sign-out");
+      console.log(response1);
+      const response2 = await axios.get(
         `/api/user/delete/${currentUser.data.account_id}`
       );
-      console.log(response.data);
-      await dispatch(deleteUserSuccess(response));
+      console.log(response2.data);
+      dispatch(deleteUserSuccess(response1));
+      navigate("/welcome");
     } catch (error) {
       dispatch(deleteUserFailure(error.message));
     }
