@@ -2,11 +2,18 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer className="bg-green-600 text-white py-5 px-10 mt-10">
+    <footer className="bg-green-600 text-white py-5 px-10">
       <div className="container mx-auto flex justify-between items-center">
-        <div>
+        <div className="flex items-center gap-1">
+          <img
+            className="h-9 w-9"
+            src="../../images/blood-drop.svg"
+            alt="icon"
+          />
           <h1 className="text-2xl font-bold">HealthHub</h1>
-          <p>© {new Date().getFullYear()} All rights reserved.</p>
+          <p className="ml-5">
+            © {new Date().getFullYear()} All rights reserved.
+          </p>
         </div>
         <nav>
           <ul className="flex space-x-5">
