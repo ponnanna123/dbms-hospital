@@ -56,7 +56,7 @@ export const getAppointments = async (req, res, next) => {
     const { id } = req.params;
 
     const query1 =
-      "SELECT * FROM appointments a JOIN hospitals h ON a.hospital_id = h.hospital_id JOIN doctors d ON a.doctor_id = d.doctor_id WHERE a.account_id = ? ORDER BY a.appointment_datetime DESC";
+      "SELECT * FROM appointments a JOIN hospitals h ON a.hospital_id = h.hospital_id JOIN doctors d ON a.doctor_id = d.doctor_id WHERE a.account_id = ? ORDER BY a.appointment_datetime";
 
     db.query(query1, [id], (error, result) => {
       if (error) {
@@ -65,6 +65,26 @@ export const getAppointments = async (req, res, next) => {
       res.status(200).json({
         success: true,
         appointments: result,
+      });
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const deleteAppointment = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const query1 = "DELETE FROM appointments WHERE appointment_id = ?";
+
+    db.query(query1, [id], (error, result) => {
+      if (error) {
+        return next(errorHandler(206, "Error deleting appointment."));
+      }
+      res.status(200).json({
+        success: true,
+        message: "Appointment deleted successfully",
       });
     });
   } catch (error) {
