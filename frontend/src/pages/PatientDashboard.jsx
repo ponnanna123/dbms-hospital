@@ -27,7 +27,7 @@ const PatientDashboard = () => {
   return (
     <div className="flex flex-col items-center bg-green-200 pt-36">
       <div className="flex justify-between w-full px-4 mb-8">
-        <h3 className="text-2xl font-bold">List of appointments:</h3>
+        <h3 className="text-4xl font-bold">List of appointments:</h3>
         <button
           onClick={() => navigate("/new-appointment")}
           className="px-4 py-2 text-lg bg-green-700 border-green-700 border-2 text-white rounded hover:text-green-700 hover:bg-green-200"
@@ -35,13 +35,16 @@ const PatientDashboard = () => {
           Book a new appointment
         </button>
       </div>
-      <div className="flex flex-wrap justify-between w-full px-4">
+      <div className="flex flex-wrap justify-center w-full px-4">
         {appointments.map((appointment) => {
           const dateTime = new Date(appointment.appointment_datetime);
           const date = dateTime.toLocaleDateString();
           const time = dateTime.toLocaleTimeString();
           return (
-            <div key={appointment.appointment_id} className="w-1/3 p-4">
+            <div
+              key={appointment.appointment_id}
+              className="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 p-4"
+            >
               <div className="rounded overflow-hidden shadow-lg">
                 <img
                   className="w-full h-64 object-cover"
@@ -55,7 +58,9 @@ const PatientDashboard = () => {
                   <p className="text-base">
                     Doctor: {appointment.first_name} {appointment.last_name}
                   </p>
-                  <p className="text-base">Hospital: {appointment.hospital}</p>
+                  <p className="text-base">
+                    Hospital: {appointment.hospital_name}
+                  </p>
                   <p className="text-base">Date: {date}</p>
                   <p className="text-base">Time: {time}</p>
                 </div>
