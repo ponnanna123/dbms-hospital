@@ -44,25 +44,21 @@ export const deletePatient = async (req, res, next) => {
     db.query(procedure, (err) => {
       if (err) return next(err);
 
-      db.query(
-        "SELECT email FROM accounts WHERE account_id = ?",
-        [id],
-        (err, user) => {
-          if (err) return next(errorHandler(400, "Invalid data"));
-          const userEmail = user[0].email;
+      const query1 = `SELECT email FROM accounts WHERE account_id = ?`;
 
-          db.query(
-            "CALL delete_user_and_related_info(?, ?)",
-            [id, userEmail],
-            (err) => {
-              if (err) return next(err);
-              res
-                .status(200)
-                .json({ success: true, message: "User deleted successfully" });
-            }
-          );
-        }
-      );
+      db.query(query1, [id], (err, user) => {
+        if (err) return next(errorHandler(400, "Invalid data"));
+        const userEmail = user[0].email;
+
+        const query2 = `CALL delete_user_and_related_info(?, ?)`;
+
+        db.query(query2, [id, userEmail], (err) => {
+          if (err) return next(err);
+          res
+            .status(200)
+            .json({ success: true, message: "User deleted successfully" });
+        });
+      });
     });
   } catch (error) {
     next(error);

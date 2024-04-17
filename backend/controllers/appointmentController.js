@@ -35,14 +35,29 @@ export const createAppointment = async (req, res, next) => {
       ],
       (error, result) => {
         if (error) {
-          return next(
-            errorHandler(206, "Error in creating a new appointment.")
-          );
+          return next(errorHandler(error));
         }
-        res.status(201).json({
-          success: true,
-          message: "Appointment created successfully",
-          appointment: result.insertId,
+
+        const appointment_id = result.insertId;
+
+        const timeParts = duration.split(":");
+        const hours = parseInt(timeParts[0]);
+        const minutes = parseInt(timeParts[1]);
+        const totalMinutes = hours * 60 + minutes;
+        const amount = (totalMinutes / 30) * 50;
+
+        const date_of_billing = new Date();
+        date_of_billing.setDate(date_of_billing.getDate() + 7);
+
+        const query2 =
+          "INSERT INTO billing (appointment_id, amount, date_of_billing) VALUES (?, ?, ?)";
+
+        db.query(query2, [appointment_id, amount, date_of_billing], (error) => {
+          if (error) {
+            return next(errorHandler(error));
+          }
+
+          res.status(201).json({ message: "Appointment created successfully" });
         });
       }
     );
@@ -142,9 +157,18 @@ export const updateStatus = async (req, res, next) => {
       if (error) {
         return next(errorHandler(206, "Error updating status."));
       }
-      res.status(200).json({
-        success: true,
-        message: "Status updated successfully",
+
+      const query2 = "DELETE FROM billing WHERE appointment_id = ?";
+
+      db.query(query2, [id], (error, result) => {
+        if (error) {
+          return next(errorHandler(206, "Error deleting billing entry."));
+        }
+
+        res.status(200).json({
+          success: true,
+          message: "Status updated and billing entry deleted successfully",
+        });
       });
     });
   } catch (error) {
