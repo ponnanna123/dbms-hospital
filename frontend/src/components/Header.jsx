@@ -67,7 +67,7 @@ const Header = () => {
                           </li>
                         </Link>
                       ) : (
-                        <Link to="/appointments" onClick={toggleDropdown}>
+                        <Link to="/dashboard/doctor" onClick={toggleDropdown}>
                           <li className="px-3 py-1 hover:bg-green-400">
                             Appointments
                           </li>
