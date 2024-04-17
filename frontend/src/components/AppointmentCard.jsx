@@ -44,7 +44,7 @@ const AppointmentCard = ({ appointment }) => {
         <div className="text-gray-600">
           <button
             onClick={() => handleDelete(appointment.appointment_id)}
-            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full"
           >
             Delete
           </button>
