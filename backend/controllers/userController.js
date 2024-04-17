@@ -10,13 +10,13 @@ export const deletePatient = async (req, res, next) => {
 
   try {
     const procedure = `
-    CREATE PROCEDURE IF NOT EXISTS delete_user_and_related_info(IN user_id INT, IN user_email VARCHAR(45))
-    BEGIN
-      DELETE FROM appointments WHERE account_id = user_id;
-      DELETE FROM patients WHERE email = user_email;
-      DELETE FROM accounts WHERE account_id = user_id;
-    END
-  `;
+      CREATE PROCEDURE IF NOT EXISTS delete_user_and_related_info(IN user_id INT, IN user_email VARCHAR(45))
+      BEGIN
+        DELETE FROM appointments WHERE account_id = user_id;
+        DELETE FROM patients WHERE email = user_email;
+        DELETE FROM accounts WHERE account_id = user_id;
+      END
+    `;
 
     db.query(procedure, (err) => {
       if (err) return next(err);

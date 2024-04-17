@@ -13,7 +13,7 @@ const PatientDashboard = () => {
     const fetchAppointments = async () => {
       try {
         const response = await axios.get(
-          `/api/appointments/list/${currentUser.data.account_id}`
+          `/api/appointments/patient/${currentUser.data.account_id}`
         );
         setAppointments(response.data.appointments);
       } catch (error) {
@@ -64,7 +64,7 @@ const PatientDashboard = () => {
                   <div className="flex justify-between bg-white shadow-lg rounded-lg p-6 mb-6">
                     <div>
                       <h2 className="text-2xl font-bold text-gray-800 mb-2">
-                        {appointment.first_name} {appointment.last_name}
+                        Dr. {appointment.first_name} {appointment.last_name}
                       </h2>
                       <p className="text-gray-600">
                         <span className="font-bold">Status:</span>{" "}
