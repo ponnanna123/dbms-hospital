@@ -18,16 +18,16 @@ const SignIn = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    console.log(currentUser);
-    if (!loading) {
-      if (currentUser && currentUser.type === "P") {
-        navigate("/dashboard/patient");
-      } else if (currentUser && currentUser.type === "D") {
-        navigate("/dashboard/doctor");
-      }
-    }
-  }, [currentUser, loading]);
+  // useEffect(() => {
+  //   console.log(currentUser);
+  //   if (!loading) {
+  //     if (currentUser && currentUser.type === "P") {
+  //       navigate("/dashboard/patient");
+  //     } else if (currentUser && currentUser.type === "D") {
+  //       navigate("/dashboard/doctor");
+  //     }
+  //   }
+  // }, [currentUser, loading]);
 
   const handleChange = (e) => {
     setAccount({
@@ -46,8 +46,14 @@ const SignIn = () => {
       const response = await axios.post("/api/auth/sign-in", account);
       if (response.data.type === "P") {
         dispatch(signInSuccess(response));
+        setTimeout(() => {
+          navigate("/dashboard/patient");
+        }, 100);
       } else if (response.data.type === "D") {
         dispatch(signInSuccess(response));
+        setTimeout(() => {
+          navigate("/dashboard/doctor");
+        }, 100);
       } else {
         dispatch(signInFailure("Invalid account type"));
       }

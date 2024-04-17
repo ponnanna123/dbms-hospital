@@ -45,7 +45,7 @@ const PatientDashboard = () => {
         </button>
       </div>
       {appointments.length > 0 ? (
-        <div className="flex flex-wrap justify-start w-full px-4">
+        <div className="flex flex-wrap justify-start w-full px-4 mb-40">
           {appointments.map((appointment) => {
             const dateTime = new Date(appointment.appointment_datetime);
             const date = dateTime.toLocaleDateString();

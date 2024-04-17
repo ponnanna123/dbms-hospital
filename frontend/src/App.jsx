@@ -17,6 +17,7 @@ import SignOut from "./pages/SignOut.jsx";
 import PrivateSignInUp from "./components/PrivateSignInUp.jsx";
 import PrivateUser from "./components/PrivateUser.jsx";
 import PrivateDashboard from "./components/PrivateDashboard.jsx";
+import ConfirmDelete from "./pages/ConfirmDelete.jsx";
 
 function App() {
   return (
@@ -43,10 +44,11 @@ function App() {
         <Route element={<PrivateDashboard />}>
           <Route path="/dashboard/patient" element={<PatientDashboard />} />
           <Route path="/dashboard/doctor" element={<DoctorDashboard />} />
-        </Route>
-        <Route element={<PrivateUser />}>
           <Route path="/profile" element={<Profile />} />
           <Route path="/sign-out" element={<SignOut />} />
+        </Route>
+        <Route element={<PrivateUser />}>
+          <Route path="/confirm-delete" element={<ConfirmDelete />} />
           <Route path="/new-appointment" element={<CreateAppointment />} />
           <Route path="/appointments" element={<CreateAppointment />} />
         </Route>

@@ -8,9 +8,6 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import {
-  signOutStart,
-  signOutSuccess,
-  signOutFailure,
   updateUserStart,
   updateUserSuccess,
   updateUserFailure,
@@ -60,34 +57,6 @@ const Profile = () => {
         });
       }
     );
-  };
-
-  const handleDeleteAccount = async () => {
-    try {
-      dispatch(deleteUserStart());
-      const response1 = await axios.get("/api/auth/sign-out");
-      console.log(response1);
-      const response2 = await axios.get(
-        `/api/user/delete/${currentUser.data.account_id}`
-      );
-      console.log(response2.data);
-      dispatch(deleteUserSuccess(response1));
-      navigate("/welcome");
-    } catch (error) {
-      dispatch(deleteUserFailure(error.message));
-    }
-  };
-
-  const handleSignOut = async () => {
-    try {
-      dispatch(signOutStart());
-      const response = await axios.get("/api/auth/sign-out");
-      console.log(response.data);
-      await dispatch(signOutSuccess(response));
-      navigate("/welcome");
-    } catch (err) {
-      dispatch(signOutFailure(error.message));
-    }
   };
 
   const handleChange = (e) => {
@@ -203,13 +172,13 @@ const Profile = () => {
           </div>
           <div className="flex justify-between  transform -translate-y-5">
             <span
-              onClick={handleDeleteAccount}
+              onClick={() => navigate("/confirm-delete")}
               className="text-red-600 rounded-full px-3 py-1 font-bold cursor-pointer hover:text-white hover:bg-red-600"
             >
               Delete Account
             </span>
             <span
-              onClick={handleSignOut}
+              onClick={() => navigate("/sign-out")}
               className="text-red-600 rounded-full px-3 py-1 font-bold cursor-pointer hover:text-white hover:bg-red-600"
             >
               Sign Out

@@ -222,10 +222,10 @@ export const google = async (req, res) => {
   }
 };
 
-export const signout = async (req, res) => {
+export const signout = async (req, res, next) => {
   try {
-    res.clearCookie("access_token").status(200).send({
-      message: "User has been logged out successfully.",
+    res.clearCookie("access_token").status(201).send({
+      message: "Successfully signed out",
     });
   } catch (error) {
     return next(error);

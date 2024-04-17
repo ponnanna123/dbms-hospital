@@ -13,6 +13,6 @@ router.post("/sign-up/patient", patientsignup);
 router.post("/sign-up/doctor", doctorsignup);
 router.post("/sign-in", signin);
 router.post("/google", google);
-router.get("/sign-out", signout);
+router.post("/sign-out", signout);
 
 export default router;

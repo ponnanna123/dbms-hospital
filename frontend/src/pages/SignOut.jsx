@@ -17,7 +17,7 @@ const SignOut = () => {
     e.preventDefault();
     try {
       dispatch(signOutStart());
-      const response = await axios.get("/api/auth/sign-out");
+      const response = await axios.post("/api/auth/sign-out");
       console.log(response.data);
       if (response.data.success) {
         dispatch(signOutFailure(response.data.message));
