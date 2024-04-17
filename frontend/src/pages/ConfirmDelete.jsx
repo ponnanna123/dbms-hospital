@@ -34,7 +34,7 @@ const ConfirmDelete = () => {
       }
       setTimeout(() => {
         navigate("/welcome");
-      }, 1000);
+      }, 100);
     } catch (error) {
       console.log(error);
       dispatch(deleteUserFailure(error.message));

@@ -11,9 +11,6 @@ import {
   updateUserStart,
   updateUserSuccess,
   updateUserFailure,
-  deleteUserStart,
-  deleteUserSuccess,
-  deleteUserFailure,
 } from "../redux/user/userSlice";
 import { app } from "../firebase";
 import { useNavigate } from "react-router-dom";
