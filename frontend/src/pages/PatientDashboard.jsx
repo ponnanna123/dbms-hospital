@@ -35,15 +35,6 @@ const PatientDashboard = () => {
     (appt) => appt.status === "Scheduled"
   );
 
-  const handleDelete = async (appt_id) => {
-    try {
-      const response = await axios.get(`/api/appointments/delete/${appt_id}`);
-      console.log(response.data);
-    } catch (error) {
-      console.log("Failed to delete appointment", error);
-    }
-  };
-
   return (
     <div className="flex flex-col items-center bg-green-200 pt-36 lg:pl-16 lg:pr-16 xl:pl-24 xl:pr-24 pl-12 pr-12">
       <div className="flex justify-between w-full px-4 mb-8 mt-4 transform -translate-y-10">
@@ -59,7 +50,12 @@ const PatientDashboard = () => {
       {scheduledAppointments.length > 0 ? (
         <div className="flex flex-wrap justify-start w-full px-4 mb-40">
           {scheduledAppointments.map((appt) => (
-            <AppointmentCard appointment={appt} />
+            <div
+              key={appt.appointment_id}
+              className="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 p-4"
+            >
+              <AppointmentCard appointment={appt} />
+            </div>
           ))}
         </div>
       ) : (
@@ -71,7 +67,12 @@ const PatientDashboard = () => {
       {completedAppointments.length > 0 ? (
         <div className="flex flex-wrap justify-start w-full px-4 mb-40">
           {completedAppointments.map((appt) => (
-            <AppointmentCard appointment={appt} />
+            <div
+              key={appt.appointment_id}
+              className="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 p-4"
+            >
+              <AppointmentCard appointment={appt} />
+            </div>
           ))}
         </div>
       ) : (
@@ -83,7 +84,12 @@ const PatientDashboard = () => {
       {canceledAppointments.length > 0 ? (
         <div className="flex flex-wrap justify-start w-full px-4 mb-40">
           {canceledAppointments.map((appt) => (
-            <AppointmentCard appointment={appt} />
+            <div
+              key={appt.appointment_id}
+              className="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 p-4"
+            >
+              <AppointmentCard appointment={appt} />
+            </div>
           ))}
         </div>
       ) : (

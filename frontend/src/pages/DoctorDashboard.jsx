@@ -38,7 +38,7 @@ const DoctorDashboard = () => {
 
   return (
     <div className="flex flex-col items-center bg-green-200 pt-36 lg:pl-16 lg:pr-16 xl:pl-24 xl:pr-24 pl-12 pr-12">
-      <div className="flex justify-between w-full px-4 mb-8 mt-4 transform -translate-y-10">
+      <div className="flex justify-between w-full px-4 mb-20 mt-4 transform -translate-y-10">
         <h3 className="text-4xl font-bold">List of appointments:</h3>
       </div>
       {appointments.length > 0 ? (
@@ -64,7 +64,8 @@ const DoctorDashboard = () => {
                         {appointment.first_name} {appointment.last_name}
                       </div>
                       <p className="text-gray-600">
-                        <span className="font-bold">Status:</span>{" "}
+                        <span className="font-bold">Status:</span>
+                        <br />
                         {appointment.status}
                       </p>
                       <p className="text-gray-600 text-base">Date: {date}</p>
@@ -75,7 +76,7 @@ const DoctorDashboard = () => {
                         onClick={() =>
                           handleUpdate(appointment.appointment_id, "Completed")
                         }
-                        className="px-4 py-2 bg-green-600 text-white rounded-full hover:bg-green-400"
+                        className="px-4 py-2 bg-green-500 text-white rounded-full hover:bg-green-700"
                       >
                         Complete
                       </button>
@@ -83,7 +84,7 @@ const DoctorDashboard = () => {
                         onClick={() =>
                           handleUpdate(appointment.appointment_id, "Canceled")
                         }
-                        className="px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-400"
+                        className="px-4 py-2 bg-red-500 text-white rounded-full hover:bg-red-700"
                       >
                         Cancel
                       </button>

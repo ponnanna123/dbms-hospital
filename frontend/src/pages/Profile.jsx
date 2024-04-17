@@ -17,20 +17,38 @@ import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const fileRef = useRef(null);
-  const dispatch = useDispatch();
+
   const { currentUser, loading, error } = useSelector((state) => state.user);
+
+  const [userDetails, setUserDetails] = useState({});
   const [imageFile, setImageFile] = useState(undefined);
   const [uploadPercent, setUploadPercent] = useState(0);
   const [uploadError, setUploadError] = useState(false);
   const [formData, setFormData] = useState({});
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (imageFile) {
       handleImageUpload(imageFile);
     }
   }, [imageFile]);
+
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      try {
+        const response = await axios.get(
+          `/api/user/fetch/${currentUser.data.account_id}`
+        );
+        setUserDetails(response.data.user[0]);
+      } catch (error) {
+        console.log("Failed to fetch user details", error);
+      }
+    };
+
+    fetchUserDetails();
+  }, [userDetails]);
 
   const handleImageUpload = async (imageFile) => {
     const storage = getStorage(app);
@@ -67,11 +85,14 @@ const Profile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     dispatch(updateUserStart());
-    const response = await axios.post(
-      `/api/user/update/${currentUser.data.account_id}`,
-      formData
-    );
     try {
+      await axios.put(
+        `/api/user/update/${currentUser.data.account_id}`,
+        formData
+      );
+      const response = await axios.get(
+        `/api/user/fetch/${currentUser.data.account_id}`
+      );
       dispatch(updateUserSuccess(response));
     } catch (error) {
       dispatch(updateUserFailure(error.message));
@@ -97,12 +118,7 @@ const Profile = () => {
           />
           <img
             className="rounded-full h-24 w-24 object-cover cursor-pointer self-center mb-16 -mt-5"
-            src={
-              formData.profile_url ||
-              (currentUser && currentUser.data
-                ? currentUser.data.profile_url
-                : "")
-            }
+            src={formData.profile_url || userDetails.profile_url}
             alt="profile img"
             onClick={() => fileRef.current.click()}
           />
@@ -127,9 +143,7 @@ const Profile = () => {
               className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
               type="text"
               name="username"
-              defaultValue={
-                currentUser && currentUser.data ? currentUser.data.username : ""
-              }
+              defaultValue={userDetails.username}
               onChange={handleChange}
             />
           </div>
@@ -141,9 +155,7 @@ const Profile = () => {
               className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
               type="email"
               name="email"
-              defaultValue={
-                currentUser && currentUser.data ? currentUser.data.email : ""
-              }
+              defaultValue={userDetails.email}
               onChange={handleChange}
             />
           </div>

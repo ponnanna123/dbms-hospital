@@ -2,6 +2,29 @@ import db from "../server.js";
 import bcryptjs from "bcryptjs";
 import { errorHandler } from "../utils/error.js";
 
+export const fetchUser = async (req, res, next) => {
+  const { id } = req.params;
+  if (req.user.id != id) {
+    return next(errorHandler(401, "You can only view your own account!"));
+  }
+
+  try {
+    const query = `SELECT * FROM accounts WHERE account_id = ?`;
+
+    db.query(query, [id], (error, result) => {
+      if (error) {
+        return next(errorHandler(400, "Invalid data"));
+      }
+      res.status(200).json({
+        success: true,
+        user: result,
+      });
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 export const deletePatient = async (req, res, next) => {
   const { id } = req.params;
   if (req.user.id != id) {
@@ -65,21 +88,30 @@ export const updateUser = async (req, res, next) => {
 
     const query1 = `UPDATE accounts SET ? WHERE account_id = ?`;
 
-    const updatedUser = db.query(
-      query1,
-      [updatedValues, req.params.id],
-      (error, data) => {
-        try {
-          if (error) {
-            return next(errorHandler(400, "Invalid data"));
-          }
-        } catch (error) {
-          next(error);
+    db.query(query1, [updatedValues, req.params.id], async (error, data) => {
+      try {
+        if (error) {
+          return next(errorHandler(400, "Invalid data"));
         }
-        res.status(200).send(updatedUser.values);
+
+        const query2 = `SELECT * FROM accounts WHERE account_id = ?`;
+        const updatedUser = db.query(query2, [req.params.id]);
+
+        const newToken = jwt.sign(
+          { id: updatedUser.account_id },
+          process.env.JWT_SECRET
+        );
+
+        res.cookie("token", newToken, { httpOnly: true, maxAge: 31536000 });
+
+        res.status(200).json({
+          success: true,
+          message: "User details updated successfully.",
+        });
+      } catch (error) {
+        next(error);
       }
-    );
-    console.log(updatedUser.values);
+    });
   } catch (error) {
     next(error);
   }
