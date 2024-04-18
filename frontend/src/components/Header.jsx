@@ -59,7 +59,10 @@ const Header = () => {
                     />
                   </Link>
                   {dropdown && (
-                    <ul className="absolute right-0 mt-2 bg-green-300 text-black rounded py-2 w-44 border border-black transition transform origin-top-right ease-out duration-200">
+                    <ul className="absolute right-0 mt-2 bg-green-300 text-black rounded py-2 w-48 border border-black transition transform origin-top-right ease-out duration-200">
+                      <li className="px-3 py-3 font-semibold">
+                        User: {currentUser.data.username}
+                      </li>
                       {currentUser.data.type === "P" ? (
                         <Link to="/new-appointment" onClick={toggleDropdown}>
                           <li className="px-3 py-1 hover:bg-green-400">

@@ -24,7 +24,7 @@ const Services = () => {
       <h1 className="text-center text-5xl font-bold mb-10">
         We offer the following services:
       </h1>
-      <div className="px-4 ml-96 mr-96 pb-24 md:px-0">
+      <div className="px-4 ml-80 mr-80 max-lg:ml-32 max-lg:mr-32 max-sm:ml-4 max-sm:mr-4 pb-24 md:px-0">
         {allInfo.map((department) => (
           <div key={department.department_id} className="mb-10">
             <h3 className="text-4xl font-semibold mb-4">

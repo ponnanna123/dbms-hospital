@@ -19,11 +19,23 @@ const ConfirmDelete = () => {
   const handleDeleteUser = async () => {
     try {
       dispatch(deleteUserStart());
-      const response1 = await axios.delete(
-        `/api/user/delete/${currentUser.data.account_id}`
-      );
-      console.log(response1.data);
-      dispatch(deleteUserSuccess(response1));
+
+      let response1;
+      if (currentUser.data.type === "P") {
+        response1 = await axios.delete(
+          `/api/user/delete/patient/${currentUser.data.account_id}`
+        );
+      } else if (currentUser.data.type === "D") {
+        response1 = await axios.delete(
+          `/api/user/delete/doctor/${currentUser.data.account_id}`
+        );
+      }
+
+      if (response1) {
+        console.log(response1.data);
+        dispatch(deleteUserSuccess(response1.data));
+      }
+
       try {
         dispatch(signOutStart());
         const response2 = await axios.post("/api/auth/sign-out");
