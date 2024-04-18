@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import AppointmentCard from "../components/AppointmentCard";
+import PatientAppointmentCard from "../components/PatientAppointmentCard";
 
 const PatientDashboard = () => {
   const [appointments, setAppointments] = useState([]);
@@ -54,7 +54,7 @@ const PatientDashboard = () => {
               key={appt.appointment_id}
               className="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 p-4"
             >
-              <AppointmentCard appointment={appt} />
+              <PatientAppointmentCard appointment={appt} />
             </div>
           ))}
         </div>
@@ -71,7 +71,7 @@ const PatientDashboard = () => {
               key={appt.appointment_id}
               className="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 p-4"
             >
-              <AppointmentCard appointment={appt} />
+              <PatientAppointmentCard appointment={appt} />
             </div>
           ))}
         </div>
@@ -88,7 +88,7 @@ const PatientDashboard = () => {
               key={appt.appointment_id}
               className="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 p-4"
             >
-              <AppointmentCard appointment={appt} />
+              <PatientAppointmentCard appointment={appt} />
             </div>
           ))}
         </div>

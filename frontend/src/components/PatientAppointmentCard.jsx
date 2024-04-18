@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const AppointmentCard = ({ appointment }) => {
+const PatientAppointmentCard = ({ appointment }) => {
   const dateTime = new Date(appointment.appointment_datetime);
   const date = dateTime.toLocaleDateString();
   const time = dateTime.toLocaleTimeString();
@@ -54,4 +54,4 @@ const AppointmentCard = ({ appointment }) => {
   );
 };
 
-export default AppointmentCard;
+export default PatientAppointmentCard;

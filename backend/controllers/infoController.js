@@ -117,3 +117,20 @@ export const fetchAllInfo = (req, res, next) => {
     }
   });
 };
+
+export const fetchAdmins = async (req, res, next) => {
+  try {
+    const query = "SELECT * FROM admins";
+    db.query(query, (err, result) => {
+      if (err) {
+        return next(err);
+      }
+      return res.status(200).json({
+        success: true,
+        admins: result,
+      });
+    });
+  } catch (error) {
+    next(error);
+  }
+};
