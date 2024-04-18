@@ -35,6 +35,7 @@ export const deletePatient = async (req, res, next) => {
     const procedure = `
       CREATE PROCEDURE IF NOT EXISTS delete_patient_and_related_info(IN user_id INT, IN user_email VARCHAR(45))
       BEGIN
+        DELETE FROM billing WHERE appointment_id IN (SELECT appointment_id FROM appointments WHERE account_id = user_id);
         DELETE FROM appointments WHERE account_id = user_id;
         DELETE FROM patients WHERE email = user_email;
         DELETE FROM accounts WHERE account_id = user_id;
@@ -52,16 +53,14 @@ export const deletePatient = async (req, res, next) => {
 
         const query2 = `CALL delete_patient_and_related_info(?, ?)`;
 
-        db.query(query2, [id, userEmail], (err) => {
+        db.query(query2, [id, userEmail], (err, result) => {
           if (err) return next(err);
-          res
-            .status(200)
-            .json({ success: true, message: "User deleted successfully" });
+          res.status(200).json({ message: "Patient deleted successfully" });
         });
       });
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
