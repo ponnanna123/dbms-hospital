@@ -8,6 +8,7 @@ const PatientAppointmentCard = ({ appointment }) => {
   const handleDelete = async (appt_id) => {
     try {
       const response = await axios.get(`/api/appointments/delete/${appt_id}`);
+      appointment = response.data;
       console.log(response.data);
     } catch (error) {
       console.log("Failed to delete appointment", error);

@@ -11,6 +11,7 @@ const DoctorAppointmentCard = ({ appointment }) => {
         `/api/appointments/update/status/${appt_id}`,
         { status }
       );
+      appointment = response.data;
       console.log(response.data);
     } catch (error) {
       console.log("Failed to delete appointment", error);
@@ -21,7 +22,7 @@ const DoctorAppointmentCard = ({ appointment }) => {
     <div className="rounded overflow-hidden shadow-lg">
       <img
         className="w-full h-64 object-cover"
-        src={appointment.image}
+        src="../../images/blood-drop.svg"
         alt="Background"
       />
       <div className="flex justify-between bg-white shadow-lg rounded-lg p-6 mb-6">
@@ -35,6 +36,10 @@ const DoctorAppointmentCard = ({ appointment }) => {
           </p>
           <p className="text-gray-600">
             <span className="font-bold">Time:</span> {time}
+          </p>
+          <p className="text-gray-600">
+            <span className="font-bold">Description:</span>{" "}
+            {appointment.description}
           </p>
         </div>
         <div className="text-gray-600">

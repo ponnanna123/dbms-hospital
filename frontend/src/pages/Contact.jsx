@@ -42,15 +42,6 @@ function Contact() {
           </div>
         ))}
       </div>
-      <div className="text-center text-black mt-48">
-        <p>
-          For general inquiries, please contact us at{" "}
-          <a href="mailto:info@example.com" className="text-blue-900 underline">
-            info@example.com
-          </a>
-          .
-        </p>
-      </div>
     </div>
   );
 }
